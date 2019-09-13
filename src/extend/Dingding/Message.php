@@ -10,8 +10,8 @@ use think\facade\Cache;
  */
 class Message{
     protected $config = array(
-        'appid' => 'wx9dcb9f8952ba04b6',
-        'appSecret' => '308f19a78ae6d79aa7ba5dfc382040af',
+        'appid' => '微信小程序id',
+        'appSecret' => '小程序appSecret',
         'template_id' => 'R6ajqLT2m0AkyxnfZujCwcQQUnY7TqyeTvQBhU5fYrk'
     );
     //获取微信accesstoken,现目前过期时间为7200s
