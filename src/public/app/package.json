@@ -1,0 +1,24 @@
+{
+  "name": "eduoa",
+  "version": "1.0.0",
+  "description": "教育行业OA系统",
+  "homepage": "http://www.bainiu.com/",
+  "license": "Apache-2.0",
+  "private": true,
+  "devDependencies": {
+    "chai": "^4.1.1",
+    "del": "^2.2.2",
+    "gulp": "^4.0.1",
+    "gulp-clean-css": "^4.0.0",
+    "gulp-concat": "^2.6.0 ",
+    "gulp-header": "^1.8.8",
+    "gulp-if": "^2.0.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-replace": "^0.6.1",
+    "gulp-uglify": "^1.5.4",
+    "minimist": "^1.2.0",
+    "mocha": "^6.1.4",
+    "sinon": "^7.3.2",
+    "sinon-chai": "^3.3.0"
+  }
+}

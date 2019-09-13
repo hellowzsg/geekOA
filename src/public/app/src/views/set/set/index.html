@@ -1,0 +1,118 @@
+<title>工作室设置</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>设置</cite></a>
+        <a href="#/lesson/index/"><cite>工作室设置</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">工作室设置</div>
+        <button type="button" style="margin-left: 20px;" class="layui-btn" id="dingding">钉钉uid绑定</button>
+        <button type="button" style="margin-left: 20px;" class="layui-btn" id="menu">生成菜单</button>
+        <input class="layui-input"style="margin-left: 20px;width: 200px;margin-top: 20px;" type="text" name="check" value="" id="check"/>
+        <button type="button" style="margin-left: 20px;margin-top: 20px;" class="layui-btn" id="demo0">生成钉钉考勤</button>
+        <div class="layui-card-body">
+            <script type="text/html" template lay-url="{{layui.cache.baseapi}}/api/set.Set/index" lay-data="{{JSON.stringify(layui.router().search)}}" lay-done="layui.data.done(d)">
+            <div class="layui-form"  lay-filter="set-set-index-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否假期</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="is_holiday" value="1"  {{d.data.is_holiday==1?"checked":""}} title="是" />
+                        <input type="radio" name="is_holiday" value="2"  {{d.data.is_holiday==2?"checked":""}} title="否" />
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开始周一</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" name="first_cycle_date" value="{{ d.data.first_cycle_date}}" id="first_cycle_date" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">假期工作</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="number" name="holiday_duty_time_day" value="{{ d.data.holiday_duty_time_day}}" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上学期间工作时长</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="number" name="school_duty_time_week" value="{{ d.data.school_duty_time_week}}" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="button" lay-submit lay-filter="set-set-index-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </div>
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.data.done = function(d){
+        layui.use(['form','laydate'], function() {
+            var form = layui.form,
+                laydate = layui.laydate;
+            form.render();
+            laydate.render({elem: '#first_cycle_date', type: 'date'});
+            laydate.render({elem: '#check', type: 'date'});
+        });
+    };
+    layui.use(['admin', 'form', 'layer','laydate'], function(){
+        var $ = layui.$,
+            admin = layui.admin,
+            form = layui.form,
+            layer = layui.layer,
+            laydate = layui.laydate;
+
+        form.render();
+        laydate.render({elem:'#first_cycle_date',type: 'date'});
+        laydate.render({elem:'#check',type: 'date'});
+        form.render();
+        $('#dingding').click(function () {
+            admin.req({
+                url: layui.cache.baseapi + '/api/set.Set/ding',
+                type: 'get',
+                done: function(res) {
+                    layer.msg(res.msg, {icon: 1 });
+                }
+            });
+        });
+        $('#menu').click(function () {
+            admin.req({
+                url: layui.cache.baseapi + '/api/set.Set/menu',
+                type: 'get',
+                done: function(res) {
+                    layer.msg(res.msg, {icon: 1 });
+                }
+            });
+        });
+        $('#demo0').click(function () {
+            var data = $('#check').val();
+            admin.req({
+                url: layui.cache.baseapi + '/api/set.Set/record',
+                type: 'get',
+                data: {check:data},
+                done: function(res) {
+                    layer.msg(res.msg, {icon: 1 });
+                }
+            });
+        });
+        //监听提交
+        form.on('submit(set-set-index-form-submit)', function (data) {
+            admin.req({
+                url: layui.cache.baseapi + '/api/set.Set/set',
+                type: 'POST',
+                data: data.field,
+                done: function(res) {
+                    layer.msg(res.msg, {icon: 1 });
+                }
+            });
+        });
+        form.render();
+    });
+</script>

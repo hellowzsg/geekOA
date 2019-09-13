@@ -1,0 +1,42 @@
+.gk-reason {
+  font-size: 34rpx;
+  background-color: #fff;
+  padding: 50rpx 20rpx;
+}
+
+.gk-reason-cell {
+  background-color: #fff;
+  padding: 20rpx 0;
+  display: flex;
+}
+
+.cell-hd {
+  width: 20%;
+  display: inline-block;
+  padding-left: 50rpx;
+}
+
+.cell-bd {
+  width: 70%;
+  padding: 0 5%;
+  display: inline-block;
+  align-items: center;
+}
+
+.gk-reason-cont {
+  width: 100%;
+}
+
+.gk-reason-ctrl {
+  margin: 0 5%;
+  text-align: right;
+}
+
+.ctrl-btn-save {
+  background-color: #4486f4;
+  color: #fff;
+}
+
+.ctrl-btn-save-act {
+  background-color: #4486d1;
+}

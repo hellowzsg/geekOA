@@ -1,0 +1,85 @@
+<title>部门通讯录</title>
+  
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>公司管理</cite></a>
+        <a><cite>部门管理</cite></a>
+        <a><cite>部门通讯录</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">部门通讯录</div>
+        <div class="layui-card-body">
+            <div class="layui-row">
+                <div class="layui-col-xs4 layui-col-sm3 layui-col-md2 layui-col-lg2">
+                    <ul id="company-department-staff-dtree" class="dtree" data-id="0" style="width:100%"></ul>
+                </div>
+                <div class="layui-col-xs8 layui-col-sm9 layui-col-md10 layui-col-lg10">
+                    <table id="company-department-staff-table" lay-filter="company-department-staff-table"></table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['dtree', 'table'], function(){
+        var $ = layui.jquery,
+            form = layui.form,
+            dtree = layui.dtree,
+            table = layui.table;
+
+        layui.link(layui.setter.base + 'style/extend/dtree/dtree.css?v=' + layui.admin.v);
+        layui.link(layui.setter.base + 'style/extend/dtree/dtreefont.css?v=' + layui.admin.v);
+
+        dtree.render({
+            elem: "#company-department-staff-dtree",//绑定元素
+            initLevel: 5,
+            url: layui.cache.baseapi + '/api/company.department/staff',
+            method: 'get',
+            dataStyle: "layuiStyle",
+            response:{message:"msg",statusCode:0}
+        });
+        dtree.on("node('company-department-staff-dtree')" ,function(obj){
+            //执行重载
+            table.reload('company-department-staff-table', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                where: {
+                    deptid: obj.param.nodeId
+                },
+                done: function(d){
+
+                }
+            });
+        });
+
+        //相关部门所属员工
+        table.render({
+            elem: '#company-department-staff-table',
+            page: true, 
+            limit: 20, 
+            url: layui.cache.baseapi + '/api/company.department/departmentstaff', //接口
+            cols: [[
+                {field: 'name', title: '姓名', width: 100},
+                {field: 'position', title: '职位', width: 100},
+                {field: 'department', title: '部门', width: 150},
+                {field: 'leaddepartment', title: '部门leader', width: 150},
+                {field: 'mobile', title: '手机号', width: 120},
+                {field: 'wechat', title: '微信号', width: 120},
+                {field: 'family', title: '家属联系方式', width:150},
+                {title: '操作', align:'center', width:170,
+                    templet: function(d){
+                        return layui.admin.checkauth('company.user.edit') ? '<a class="layui-btn layui-btn-normal layui-btn-xs" href="#/company/user/edit/uid=' + d.uid + '"><i class="layui-icon layui-icon-edit"></i>编辑</a>' : '';
+                    }
+                }
+            ]], 
+            text: {
+                none: '暂无相关数据'
+            }
+        });
+    });
+</script>

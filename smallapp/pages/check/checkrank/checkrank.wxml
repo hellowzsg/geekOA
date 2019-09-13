@@ -1,0 +1,41 @@
+<wxs module="division">
+  var getT = function(t) {
+    var h = (t / 60).toFixed(1);
+    return (h == 0 ? '--' : h + "h");
+  }
+  module.exports.getT = getT;
+</wxs>
+<view class="container">
+  <view class="rank">
+    <view class="myimage">
+      <open-data type="userAvatarUrl" class="myimage-img"></open-data>
+    </view>
+    <view class="ranking">No.{{ranking}}</view>
+  </view>
+  <view class="section">
+    <picker mode="date" value="{{begin}}" start="2019-07-01" end="" bindchange="bindDateChangeBegin">起：{{begin}}</picker>
+    <picker mode="date" value="{{end}}" start="2019-07-01" end="" bindchange="bindDateChangeEnd">止：{{end}}</picker>
+  </view>
+  <view class="select">
+    <view style="{{currentSelect=='thisweek'?'background-color: #7aa8f8;color: #fff;':''}}" data-name="thisweek" bindtap="rank">本周</view>
+    <view style="{{currentSelect=='lastweek'?'background-color: #7aa8f8;color: #fff;':''}}" data-name="lastweek" bindtap="rank">上周</view>
+    <view style="{{currentSelect=='thismonth'?'background-color: #7aa8f8;color: #fff;':''}}" data-name="thismonth" bindtap="rank">本月</view>
+    <view style="{{currentSelect=='lastmonth'?'background-color: #7aa8f8;color: #fff;':''}}" data-name="lastmonth" bindtap="rank">上月</view>
+  </view>
+  <view class="journal">
+    <view class="rank-header">
+      <text>排名</text>
+      <text>姓名</text>
+      <text>当前</text>
+      <text>趋势</text>
+    </view>
+    <block wx:for="{{rank}}" wx:key>
+      <view class="rank-box">
+        <text>{{item.num>9?item.num:'0'+item.num}}</text>
+        <text>{{item.username}}</text>
+        <text>{{division.getT(item.times)}}</text>
+        <text style="color:{{(division.getT(item.cha))=='--'?'':(item.cha>0?'green':'red')}};">{{division.getT(item.cha)}}</text>
+      </view>
+    </block>
+  </view>
+</view>

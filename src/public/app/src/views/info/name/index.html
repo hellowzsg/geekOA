@@ -1,0 +1,52 @@
+<title>姓名修改</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>个人中心</cite></a>
+        <a href="#/name/index/"><cite>姓名修改</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">姓名修改</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="info-name-index-form">
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">新姓名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" required lay-verify="required" placeholder="请输入新姓名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="button" lay-submit lay-filter="info-name-index-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['admin', 'form', 'layer'], function(){
+        var $ = layui.$,
+            admin = layui.admin,
+            form = layui.form,
+            layer = layui.layer;
+
+        form.render(null, 'info-name-index-form');
+        //监听提交
+        form.on('submit(info-name-index-form-submit)', function (data) {
+            console.log(data);
+            admin.req({
+                url: layui.cache.baseapi + '/api/info.name/edit',
+                type: 'POST',
+                data: data.field,
+                done: function(res) {
+                    layer.msg(res.msg, {icon: 1 });
+                }
+            });
+        });
+    });
+</script>

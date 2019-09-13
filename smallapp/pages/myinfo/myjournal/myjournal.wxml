@@ -1,0 +1,22 @@
+<view class='journal'>
+  <view class='jour-header'>
+    <image class='jour-headder-tag' src='/images/shuqian.png'></image>
+    <view class='jour-date'>
+      <view class='date-box-ym-w'>
+        <text class='jour-date-ym'>{{time.year}}/{{time.month>9?time.month:'0'+time.month}}</text>
+        <text class='jour-date-w'>周{{time.week}}</text>
+      </view>
+      <view class='date-box-d'>
+        <text class='jour-date-d'>{{time.day>9?time.day:'0'+time.day}}</text>
+      </view>
+    </view>
+  </view>
+  <view class='jour-form' style='height:{{formHeight-182}}rpx;'>
+    <form bindsubmit='formSubmit' report-submit='true'>
+      <view class='form-box' style='background: url({{boxBackground}}) repeat-y;height:{{boxHeight}}rpx;'>
+        <textarea focus="{{autoFocus}}" auto-height='true' maxlength='-1' class='form-textarea' bindlinechange='bindHeight' bindinput='textareaFun' value="{{content}}" placeholder='😊 开始记录你的一天吧！'></textarea>
+      </view>
+      <button form-type='submit' class='form-btn-submit'>提交</button>
+    </form>
+  </view>
+</view>

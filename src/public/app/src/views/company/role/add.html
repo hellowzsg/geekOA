@@ -1,0 +1,111 @@
+<title>添加角色</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>公司管理</cite></a>
+        <a href="#/company/role/"><cite>角色管理</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">添加角色</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="company-role-add-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色名称</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" name="name" value="" placeholder="请输入角色名称" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">角色授权</label>
+                        <div class="layui-input-block">
+                            <div id="LAY-company-role-add-form-rules"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数据权限</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="data_rules" value="1" title="个人" checked>
+                        <input type="radio" name="data_rules" value="2" title="所属部门">
+                        <input type="radio" name="data_rules" value="3" title="所属部门及下属部门">
+                        <input type="radio" name="data_rules" value="4" title="全公司">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="status" value="1" title="可用" checked>
+                        <input type="radio" name="status" value="2" title="禁用">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text layui-col-md8 layui-col-lg7">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea name="remark" placeholder="请输入备注信息" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="button" lay-submit lay-filter="company-role-add-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['admin', 'form', 'layer', 'authtree'], function(){
+        var $ = layui.$,
+            admin = layui.admin,
+            form = layui.form,
+            layer = layui.layer,
+            authtree = layui.authtree;
+
+        //权限节点数据
+        admin.req({
+            url: layui.cache.baseapi + '/api/company.role/getrules',
+            dataType: 'json',
+            success: function(data){
+                var trees = authtree.listConvert(data.data.list, {
+                    primaryKey: 'alias'
+                    ,startPid: '0'
+                    ,parentKey: 'palias'
+                    ,nameKey: 'name'
+                    ,valueKey: 'alias'
+                    ,checkedKey: data.data.checkedAlias
+                });
+                authtree.render('#LAY-company-role-add-form-rules', trees, {
+                    inputname: 'ruleids[]', 
+                    layfilter: 'lay-company-role-add-check-auth', 
+                    autowidth: true
+                });
+            }
+        });
+
+        form.render(null, 'company-role-add-form');
+
+        //监听提交
+        form.on('submit(company-role-add-form-submit)', function (data) {
+            admin.req({
+                url: layui.cache.baseapi + '/api/company.role/add',
+                type: 'POST',
+                data: data.field,
+                done: function(res) {
+                    form.val("company-role-add-form", {//重置表单
+                        "name": "",
+                        "remark": ""
+                    });
+                    $("input[name='status'][value=1]").prop("checked", "checked");
+                    $("input[name='data_rules'][value=1]").prop("checked", "checked");
+                    authtree.uncheckAll('#LAY-company-role-add-form-rules');
+                    authtree.closeAll('#LAY-company-role-add-form-rules');
+                    form.render(null, 'company-role-add-form');
+                    layer.msg(res.msg, {icon: 1 });
+                }
+            });   
+        });
+    });
+</script>

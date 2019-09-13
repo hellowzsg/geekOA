@@ -1,0 +1,63 @@
+<view class="mycheck">
+  <!-- 时间选择 -->
+  <view class="select-time">
+    <picker mode="date" value="{{date}}" start="2019-07" end="{{dateNow}}" fields="month" bindchange="bindDateChange">
+      <view class="time-picker">
+        月份: {{date}}
+      </view>
+    </picker>
+    <view class='select-time-ctrl'>
+      <text class='select-time-ctrl-up' bindtap='dateUp' decode='true'>&lt;</text>
+      <text class='select-time-ctrl-down' bindtap='dateDown' decode='true'>&gt;</text>
+    </view>
+  </view>
+  <!-- 时间选择 -->
+  <!-- 日历 -->
+  <view class="cal">
+    <!-- 表头 -->
+    <view class="cal-hd">
+      <text class="cal-item">一</text>
+      <text class="cal-item">二</text>
+      <text class="cal-item">三</text>
+      <text class="cal-item">四</text>
+      <text class="cal-item">五</text>
+      <text class="cal-item">六</text>
+      <text class="cal-item">日</text>
+    </view>
+    <!-- 表头 -->
+    <!-- 主体 -->
+    <view class="cal-bd">
+      <view hidden="{{recordsNow}}" class="cal-record-none">没有数据哦(●'◡'●)</view>
+      <view class="cal-item {{(item.month===1)?'item-now':'item-last'}}" wx:for="{{recordsNow}}" wx:key="" wx:for-index="idx" wx:for-item="item">
+        <text class="{{item.state ===1 ? 'card-at' : (item.state === 2 ? 'card-ab' :(item.state===-1?'card-absence':'card-normal'))}}">{{item.day===-1?'—':item.day}}</text>
+      </view>
+    </view>
+    <!-- 主体 -->
+    <!-- 尾部统计 -->
+    <view class="cal-ft">
+      tips:当月
+      <text class="ft-at">正常:{{daysAt}}</text>
+      <text class="ft-ab">缺卡:{{daysAb}}</text>
+      <text class="ft-absence">旷工:{{daysAbsence}}</text>
+    </view>
+    <!-- 尾部统计 -->
+  </view>
+  <!-- 日历 -->
+  <!-- 统计图 -->
+  <view class="chart">
+    <view class="chart-title">
+      <text>{{mNumL}}/{{mNumS}}月考勤时长分析</text>
+      <view class="chart-flex-ctrl">
+        <text bindtap="flex" data-state="minus">➖</text>
+        <text bindtap="flex" data-state="plus">➕</text>
+      </view>
+    </view>
+    <view wx:if="{{recordsNow}}">
+      <canvas canvas-id="lineCanvas" disable-scroll="true" class="canvas" bindtouchstart="touchHandler" bindtouchmove="moveHandler" bindtouchend="touchEndHandler"></canvas>
+    </view>
+    <view wx:else>
+      <view class="cal-record-none">没有数据哦(●'◡'●)</view>
+    </view>
+  </view>
+  <!-- 统计图 -->
+</view>

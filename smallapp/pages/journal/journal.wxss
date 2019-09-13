@@ -1,0 +1,72 @@
+/* 日志面板 */
+
+.gk-logs {
+  width: 700rpx;
+  margin: 30rpx auto 0;
+  /* border-radius: 4rpx; *//* box-shadow: 1px 1px 2px 1px #dfdfdf; *//* padding: 20rpx; */
+}
+
+.gk-log {
+  border-radius: 10rpx;
+  box-shadow: 1px 1px 2px 1px #dfdfdf;
+  padding: 20rpx;
+  margin-bottom: 20rpx;
+  background-color: #fff;
+}
+
+.gk-log-meta {
+  margin: 10rpx 5rpx;
+}
+
+.gk-log-meta-name {
+  font-size: 40rpx;
+}
+
+.gk-log-content {
+  position: relative;
+}
+
+.gk-log-content .gk-log-content-text {
+  font-size: 32rpx;
+  margin: 10rpx 0 10rpx;
+}
+
+.gk-log-content textarea {
+  width: 100%;
+  color: #999;
+}
+
+.gk-log-btn {
+  width: 650rpx;
+  text-align: right;
+}
+
+.gk-log-btn-modify {
+  background-color: #4486f4;
+  color: #fff;
+}
+
+.gk-log-btn-save {
+  background-color: #4486f4;
+  color: #fff;
+}
+
+.gk-log-btn-cancel {
+  margin-right: 20rpx;
+}
+
+.gk-log-btn-modify-act {
+  background-color: #4486d1;
+}
+
+.gk-log-btn-see {
+}
+
+.gk-log-none {
+  margin: 200rpx auto 0;
+  text-align: center;
+  font-size: 40rpx;
+  color: #999;
+}
+
+/* 日志面板 */

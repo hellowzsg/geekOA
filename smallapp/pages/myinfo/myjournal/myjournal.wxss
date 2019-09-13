@@ -1,0 +1,76 @@
+.journal {
+  background-color: #fcfdff;
+  /* 下划线a8b9fd */
+  padding-left: 20rpx;
+}
+
+/* 顶部信息 */
+
+.jour-header {
+  padding-left: 20rpx;
+  border-left: 2px solid #a8b9fd;
+  height: 182rpx;
+}
+
+.jour-headder-tag {
+  width: 50rpx;
+  height: 50rpx;
+  transform: translateY(-5rpx);
+}
+
+.jour-date {
+  color: #5676fc;
+  padding-bottom: 20rpx;
+}
+
+.date-box-ym-w {
+  display: inline-block;
+  width: 100rpx;
+}
+
+.jour-date-ym {
+  font-size: 24rpx;
+}
+
+.jour-date-w {
+  font-size: 32rpx;
+}
+
+.date-box-d {
+  display: inline-block;
+  width: 100rpx;
+}
+
+.jour-date-d {
+  font-size: 80rpx;
+}
+
+/* 顶部信息 */
+
+/* 主体 */
+
+.jour-form {
+  padding-left: 20rpx;
+  border-left: 2px solid #a8b9fd;
+  line-height: 1.8rem;
+}
+
+.form-box {
+  width: 100%;
+  height: 600rpx;
+  background-size: contain;
+}
+
+.form-textarea {
+  font-size: 34rpx;
+  width: 100%;
+  height: 400rpx;
+}
+.form-btn-submit {
+  width: 90%;
+  margin: 20rpx auto 0;
+  color: white;
+  background-color: #5676fc;
+}
+
+/* 主体 */

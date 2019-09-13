@@ -1,0 +1,107 @@
+<title>编辑部门</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>公司管理</cite></a>
+        <a href="#/company/department/"><cite>部门设置</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">编辑部门</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="company-department-edit-form">
+            <script type="text/html" template lay-url="{{layui.cache.baseapi}}/api/company.department/info" lay-data="{{JSON.stringify(layui.router().search)}}" lay-type="post" lay-done="layui.data.company_department_edit_done(d)">
+            {{#  if(d.data.parentid > 0){ }}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">上级部门</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="company-department-edit-form-parentid" lay-filter="company-department-edit-form-parentid" name="parentid" value="" placeholder="不选择则为一级部门" autocomplete="off" class="layui-input">           
+                    </div>
+                </div>
+            {{#  } }}
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" value="{{ d.data.name || '' }}" lay-verify="required" placeholder="请输入部门名称" autocomplete="off" class="layui-input">           
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序权重</label>
+                    <div class="layui-input-inline">            
+                        <input type="text" name="listorder" value="{{ d.data.listorder || '' }}" lay-verify="number" placeholder="数字越大排序越靠前..." autocomplete="off" class="layui-input">           
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" name="id" value="{{ d.data.id }}" >
+                        <input type="button" lay-submit lay-filter="company-department-edit-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </script>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.data.company_department_edit_done = function(data){
+        layui.use(['admin', 'form', 'treeSelect'], function(){
+            var $ = layui.jquery,
+                admin = layui.admin,
+                treeSelect = layui.treeSelect,
+                form = layui.form;
+
+            //树形下拉选择器 [https://fly.layui.com/extend/treeSelect/#doc]
+            treeSelect.render({
+                // 选择器
+                elem: '#company-department-edit-form-parentid',
+                // data分为两种：1.数组数据 或者 2.URL地址
+                //数组数据示例 [{"id": 1, "name": "财务部","open": true, "children": []}]
+                data: data.data.tree, //接口
+                // 异步加载方式：get/post，默认get
+                type: 'get',
+                // 占位符
+                placeholder: '不选择则为一级部门',
+                // 是否开启搜索功能：true/false，默认false
+                search: true,
+                // 点击回调
+                click: function(d){
+                    $("#company-department-edit-form-parentid").val(d.current.id);
+                },
+                // 加载完成后的回调函数
+                success: function (d) {
+                    var treeObj = treeSelect.zTree('company-department-edit-form-parentid');
+                    var nodes = treeObj.getNodes();
+                    if (nodes.length == 0) {
+                        $(treeObj.setting.treeObj.selector).parent().css('display', 'none');
+                    }else {
+                        //选中节点，根据id筛选
+                        $("#company-department-edit-form-parentid").val(data.data.parentid);
+                        if (data.data.parentid > 0) {
+                            treeSelect.checkNode('company-department-edit-form-parentid', data.data.parentid);
+                        }
+                    }
+                }
+            });
+
+            //监听提交
+            form.on('submit(company-department-edit-form-submit)', function (data) {
+                admin.req({
+                    url: layui.cache.baseapi + '/api/company.department/edit',
+                    type: 'POST',
+                    data: data.field,
+                    done: function(res) {
+                        layer.msg(res.msg, {
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        },
+                        function(){
+                            admin.closeThisTabs();//开启多标签页时关闭当前tab页面
+                            location.hash = '/company/department/'; //跳转到部门列表页
+                        });
+                    }
+                });
+            });
+        });
+    };
+</script>

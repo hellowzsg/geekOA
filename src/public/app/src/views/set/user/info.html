@@ -1,0 +1,66 @@
+<title>基本资料</title>
+
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>设置</cite></a>
+        <a><cite>我的信息</cite></a>
+        <a><cite>基本资料</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md12">
+            <div class="layui-card">
+                <div class="layui-card-header">我的资料</div>
+                <div class="layui-card-body">
+                <script type="text/html" template lay-type="post" lay-url="{{layui.cache.baseapi}}/api/set.user/info">
+                    <table class="layui-table">
+                        <colgroup>
+                            <col width="120"><col>
+                        </colgroup>
+                        <tbody>
+                            <tr>
+                                <td>姓名</td>
+                                <td>{{ d.data.name }}</td>
+                            </tr>
+                            <tr>
+                                <td>职位</td>
+                                <td>{{ d.data.position }}</td>
+                            </tr>
+                            <tr>
+                                <td>身份证号</td>
+                                <td>{{ d.data.idcard }}</td>
+                            </tr>
+                            <tr>
+                                <td>性别</td>
+                                <td>{{ d.data.gender }}</td>
+                            </tr>
+                            <tr>
+                                <td>手机号</td>
+                                <td>{{ d.data.mobile }}</td>
+                            </tr>
+                            <tr>
+                                <td>微信号</td>
+                                <td>{{ d.data.wechat }}</td>
+                            </tr>
+                            <tr>
+                                <td>QQ</td>
+                                <td>{{ d.data.qq }}</td>
+                            </tr>
+                            <tr>
+                                <td>Email</td>
+                                <td>{{ d.data.email }}</td>
+                            </tr>
+                            <tr>
+                                <td>家属联系方式</td>
+                                <td>{{ d.data.family }} {{ d.data.family_mobile }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

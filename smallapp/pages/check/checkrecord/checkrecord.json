@@ -1,0 +1,6 @@
+{
+  "usingComponents": {
+    "date-component": "/Components/date/date-component"
+  },
+  "navigationBarTitleText": "考勤记录"
+}

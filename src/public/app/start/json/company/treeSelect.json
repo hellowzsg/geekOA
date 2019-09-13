@@ -1,0 +1,17 @@
+{
+    "msg": "",
+    "code": 0,
+    "data": [
+        {"id": 1, "name": "财务部","open": true, "children": []},
+        {"id": 2, "name": "业务部","open": true, "children": [
+            {
+                "id": 2,
+                "name": "销售部1部"
+            },
+            {
+                "id": 2,
+                "name": "销售部2部"
+            }
+        ]}
+    ]
+}

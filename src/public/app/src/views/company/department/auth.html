@@ -1,0 +1,100 @@
+<title>部门权限设置</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>公司管理</cite></a>
+        <a href="#/company/department/"><cite>部门设置</cite></a>
+        <a><cite>员工权限</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">员工权限设置</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="company-department-auth-form">
+            <script type="text/html" template lay-url="{{layui.cache.baseapi}}/api/company.department/auth" lay-data="{{JSON.stringify(layui.router().search)}}" lay-type="post" lay-done="layui.data.company_department_auth_done(d)">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">部门名称</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" name="deptname" value="{{ d.data.deptauth.deptname || '' }}" disabled="disabled" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">权限设置</label>
+                        <div class="layui-input-block">
+                            <div id="LAY-company-department-auth-form-rules"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数据权限</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="data_rules" value="1" title="个人" checked>
+                        <input type="radio" name="data_rules" value="2" title="所属部门">
+                        <input type="radio" name="data_rules" value="3" title="所属部门及下属部门">
+                        <input type="radio" name="data_rules" value="4" title="全公司">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text layui-col-md8 layui-col-lg7">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea name="remark" placeholder="请输入备注信息" class="layui-textarea">{{ d.data.deptauth.remark || '' }}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" name="deptid" value="{{ d.data.deptauth.deptid }}" >
+                        <input type="button" lay-submit lay-filter="company-department-auth-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </script>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.data.company_department_auth_done = function(d){
+        layui.use(['admin', 'form', 'layer', 'authtree'], function(){
+            var $ = layui.$,
+                admin = layui.admin,
+                form = layui.form,
+                layer = layui.layer,
+                authtree = layui.authtree;
+
+            //权限节点数据
+            var trees = authtree.listConvert(d.data.rules, {
+                primaryKey: 'alias'
+                ,startPid: '0'
+                ,parentKey: 'palias'
+                ,nameKey: 'name'
+                ,valueKey: 'alias'
+                ,checkedKey: d.data.checkedId
+            });
+            authtree.render('#LAY-company-department-auth-form-rules', trees, {
+                inputname: 'ruleids[]', 
+                layfilter: 'lay-check-auth', 
+                autowidth: true
+            });
+
+            $("input[name='data_rules'][value="+d.data.deptauth.data_rules+"]").prop("checked", "checked");
+
+            form.render(null, 'company-department-auth-form');
+
+            //监听提交
+            form.on('submit(company-department-auth-form-submit)', function (data) {
+                admin.req({
+                    url: layui.cache.baseapi + '/api/company.department/setauth',
+                    type: 'POST',
+                    data: data.field,
+                    done: function(res) {
+                        layer.msg(res.msg, {
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        });
+                    }
+                });   
+            });
+        });
+    };
+</script>

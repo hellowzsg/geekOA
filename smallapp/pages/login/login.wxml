@@ -1,0 +1,13 @@
+<!--pages/login/login.wxml-->
+<view class='container' style='background: url({{background}}) center center no-repeat;background-size: cover;'>
+  <view class='geek-login'>
+    <text class='geek-login-title'>极客壹佰OA管理系统</text>
+    <view class='geek-login-cont'>
+      <input bindinput='bindInputAct' class='geek-login-input' value="{{account}}" type="text" placeholder="用户名" placeholder-class='geek-login-input-placeholder' maxlength='16' focus='true' adjust-position='true'></input>
+      <image src='../../images/account.png' class='geek-login-input-icon'></image>
+      <input bindinput='bindInputPwd' class='geek-login-input' value="{{password}}" password='true' placeholder="密码" placeholder-class='geek-login-input-placeholder' maxlength='16' adjust-position='true'></input>
+      <image src='../../images/password.png' class='geek-login-input-icon'></image>
+    </view>
+    <button bindtap='geekLogin' size="default" class='geek-login-btn-submit' hover-class="geek-login-btn-submit-act">点击绑定</button>
+  </view>
+</view>

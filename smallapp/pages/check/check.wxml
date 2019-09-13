@@ -1,0 +1,6 @@
+<view class="container">
+  <i-cell-group>
+    <i-cell title="考勤记录" is-link url="./checkrecord/checkrecord"></i-cell>
+    <i-cell title="考勤排名" is-link url="./checkrank/checkrank"></i-cell>
+  </i-cell-group>
+</view>

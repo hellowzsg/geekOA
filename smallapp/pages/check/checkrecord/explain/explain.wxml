@@ -1,0 +1,19 @@
+<view class="gk-reason">
+  <view class="gk-reason-cell">
+    <view class="cell-hd">日期:</view>
+    <view class="cell-bd">{{date}}</view>
+  </view>
+  <view class="gk-reason-cell">
+    <view class="cell-hd">时长:</view>
+    <view class="cell-bd">{{time}}</view>
+  </view>
+  <view class="gk-reason-cell">
+    <view class="cell-hd">原因:</view>
+    <view class="cell-bd">
+      <textarea class="gk-reason-cont" placeholder="未填写" bindinput='modifyInput' value='{{remark}}' disabled='{{!isShow}}' auto-height='true'></textarea>
+    </view>
+  </view>
+  <view wx:if="{{isShow&&isSave}}" class="gk-reason-ctrl">
+    <button class="ctrl-btn-save" hover-class="ctrl-btn-sava-act" bindtap="save" size="mini">保存</button>
+  </view>
+</view>

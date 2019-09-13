@@ -1,0 +1,47 @@
+<style>
+    .layui-table td, .layui-table th {
+        text-align: center;
+    }
+</style>
+<title>员工课表</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>员工考勤统计</cite></a>
+        <a href="#/all/courselist/"><cite>员工课表</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">员工课表</div>
+        <div class="layui-card-body">
+            <table id="check-all-courselist-table" lay-filter="check-all-courselist-table-tool"></table>
+        </div>
+    </div>
+</div>
+<script>
+    layui.use(['laydate', 'form', 'table', 'admin', 'laytpl', 'jquery'], function(){
+        var table = layui.table
+            ,admin = layui.admin
+            ,$=layui.jquery;
+
+        table.render({
+            elem: '#check-all-courselist-table'
+            ,url: layui.cache.baseapi + '/api/check.All/courselist'
+            ,cols: [[ //表头
+                 {field: 'name', title: '姓名', align: 'center'}
+                ,{field: 'course', title: '是否添加过课表', align: 'center'}
+                ,{title: '操作', align:'center',width: 100,
+                    templet: function(d){
+                        var html='';
+                        if (d.course == '是') {
+                            var Btn = '<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" href="#/check/all/coursedetail/id=' + d.id + '">查看</a>';
+                        } else {
+                            var Btn = '<a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="edit">查看</a>';
+                        }
+                        return Btn;
+                    }
+                }
+            ]]
+        });
+    });
+</script>

@@ -1,0 +1,47 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login/login",
+    "pages/journal/journal",
+    "pages/check/check",
+    "pages/check/checkrecord/checkrecord",
+    "pages/check/checkrecord/detail/detail",
+    "pages/check/checkrank/checkrank",
+    "pages/check/checkrecord/explain/explain",
+    "pages/myinfo/myinfo",
+    "pages/myinfo/myjournal/myjournal",
+    "pages/myinfo/mycheck/mycheck"
+  ],
+  "window": {
+    "backgroundTextStyle": "dark",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "极客壹佰OA",
+    "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#bfbfbf",
+    "selectedColor": "#4486f4",
+    "list": [
+      {
+        "pagePath": "pages/journal/journal",
+        "text": "日志",
+        "iconPath": "images/journal.png",
+        "selectedIconPath": "images/journal_s.png"
+      },
+      {
+        "pagePath": "pages/check/check",
+        "text": "考勤",
+        "iconPath": "images/check.png",
+        "selectedIconPath": "images/check_s.png"
+      },
+      {
+        "pagePath": "pages/myinfo/myinfo",
+        "text": "个人中心",
+        "iconPath": "images/myinfo.png",
+        "selectedIconPath": "images/myinfo_s.png"
+      }
+    ]
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap.json"
+}

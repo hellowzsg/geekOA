@@ -1,0 +1,24 @@
+<script type="text/html" template>
+<div class="layui-form" lay-filter="LAY-set-app-payment-from" id="LAY-set-app-payment-from">
+    <input type="hidden" name="type" value="{{ d.params.type }}" />
+    <input type="hidden" name="tagid" value="{{ d.params.tagid }}" />
+    <div class="layui-form-item">
+        <label class="layui-form-label">标签名称</label>
+        <div class="layui-input-inline">        
+            <input type="text" name="name" value="{{ d.params.name || '' }}" lay-verify="required" placeholder="请输入..." autocomplete="off" class="layui-input">        
+        </div>
+    </div>
+    <div class="layui-form-item">
+        <label class="layui-form-label">排序权重</label>
+        <div class="layui-input-inline">            
+            <input type="text" name="listorder" value="{{ d.params.listorder || '0' }}" lay-verify="number" placeholder="数字越大排序越靠前..." autocomplete="off" class="layui-input">           
+        </div>        
+    </div> 
+    <div class="layui-form-item">
+        <label class="layui-form-label"></label>
+        <div class="layui-input-inline">
+            <input type="button" lay-submit lay-filter="LAY-set-app-payment-from-submit" value="确认" class="layui-btn">
+        </div>
+    </div>
+</div>
+</script>

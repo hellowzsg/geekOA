@@ -1,0 +1,53 @@
+/* pages/login/login.wxss */
+
+.geek-login {
+  width: 100%;
+  height: 680rpx;
+  padding-top: 200rpx;
+  background-color: rgba(242, 243, 247, 0.9);
+  z-index: 2;
+}
+
+.geek-login-title {
+  display: block;
+  text-align: center;
+  font-size: 40rpx;
+}
+
+.geek-login-cont {
+  width: 580rpx;
+  padding: 20rpx 20rpx;
+  height: 200rpx;
+  margin: 100rpx auto;
+  box-shadow: 1px 1px 1px 1px #d0d0d0;
+  border-radius: 5rpx;
+}
+
+.geek-login-input {
+  display: inline-block;
+  width: 460rpx;
+  height: 80rpx;
+  padding: 10rpx 20rpx;
+}
+
+.geek-login-input-placeholder {
+  color: #dfdfdf;
+  font-size: 28rpx;
+}
+
+.geek-login-input-icon {
+  width: 60rpx;
+  height: 60rpx;
+  transform: translate(0, -20rpx);
+}
+
+.geek-login-btn-submit {
+  width: 550rpx;
+  margin: 0 auto;
+  background-color: #4486f4;
+  color: white;
+}
+
+.geek-login-btn-submit-act {
+  background-color: #4486d1;
+}

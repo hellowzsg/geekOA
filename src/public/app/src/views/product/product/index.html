@@ -1,0 +1,152 @@
+<title>产品列表</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>产品</cite></a>
+        <a><cite>产品列表</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-form-pane layui-card-header layuiadmin-card-header-auto" lay-filter="product-product-index-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">产品ID</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="pid" placeholder="请输入产品ID" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">产品名称</label> 
+                    <div class="layui-input-block">
+                        <input id="product-product-index-form-name" type="text" data-values="0" data-name="" name="name" placeholder="请输入产品名称" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">产品分类</label>
+                    <div class="layui-form layui-input-block" lay-filter="product-product-index-selectcategory">
+                        <select name="pcid" id="product-product-index-cat">
+                            <option value="">请选择产品分类</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="product-product-index-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-card-body">
+            <script type="text/html" id="product-product-index-toolbar">
+            {{#  if(layui.admin.checkauth('product.product.add')){ }}
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-sm" lay-event="add" data-href="#/product/product/add">添加</button>
+                </div>
+            {{#  } }}
+            </script>
+            <table id="product-product-index-table" lay-filter="product-product-index-table"></table>
+            <script type="text/html" id="product-product-index-bar">
+            {{#  if(layui.admin.checkauth('product.product.edit')){ }}
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" href="#/product/product/edit/pid={{d.pid}}"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+            {{#  } }}
+            {{#  if(layui.admin.checkauth('product.product.del')){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            {{#  } }}
+            </script>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+layui.use(['admin', 'table', 'form'], function(){
+    var $ = layui.jquery,
+        admin = layui.admin,
+        table = layui.table,
+        form = layui.form;
+
+    //产品管理
+    table.render({
+        elem: '#product-product-index-table',
+        //defaultToolbar: ['filter'], 
+        toolbar: '#product-product-index-toolbar',
+        page: true, 
+        limit: 10, 
+        url: layui.cache.baseapi + '/api/product.product/index', //接口
+        parseData: function(res){
+            var selecthtml = '<option value="">请选择产品分类</option>';
+            $.each(res.data.category, function (index, item) {
+                selecthtml += '<option value="' + item.pcid + '">' + item.name + '</option>';
+            });
+            $('#product-product-index-cat').html(selecthtml);
+            form.render('select','product-product-index-selectcategory');
+            return {
+                "code": res.code,
+                "msg": res.msg,
+                "data": res.data.list,
+                "count": res.data.total
+            }
+        },
+        cols: [[
+            {field: 'pid', width: 80, title: 'ID', sort: true}, 
+            {field: 'name', title: '名称', minWidth: 100},
+            {field: 'classname', title: '产品分类', width: 200},
+            {field: 'introduce', title: '产品介绍', minWidth: 300},
+            {field: 'createtime', title: '添加时间', minWidth: 180, sort: true, hide: true}, 
+            {title: '操作', width: 150, align: 'center', toolbar: '#product-product-index-bar' }
+        ]], 
+        text: {
+            none: '暂无相关数据'
+        }
+    });
+
+    //监听自定义头部工具条
+    table.on('toolbar(product-product-index-table)', function(obj) {
+        if(obj.event == 'add') {
+            location.href = $(this).data('href');
+        }
+    });
+
+    //监听工具条
+    table.on('tool(product-product-index-table)', function (obj) {
+        var data = obj.data;
+        if (obj.event === 'del') {
+            layer.confirm('确定删除此产品？', function (index) {
+                admin.req({
+                    url: layui.cache.baseapi + '/api/product.product/del',
+                    type: 'POST',
+                    data: {pid: data.pid},
+                    done: function() {
+                        obj.del();
+                        layer.close(index);     
+                    }
+                });                    
+            });
+        }
+    });
+
+    //监听搜索
+    form.on('submit(product-product-index-search)', function(data){
+        var field = data.field;
+      
+        //执行重载
+        table.reload('product-product-index-table', {
+            page: {
+				curr: 1 //重新从第 1 页开始
+			},
+            where: {
+                pid: field.pid,
+                name: field.name,
+                pcid: field.pcid
+            },
+            done: function(d){
+                if (data.field.pcid != undefined && data.field.pcid != '' && data.field.pcid > 0) {
+                    $("#product-product-index-cat option[value=" + data.field.pcid + "]").prop("selected",true);
+                }
+                form.render('select','product-product-index-selectcategory');
+            }
+        });
+    });
+});
+</script>

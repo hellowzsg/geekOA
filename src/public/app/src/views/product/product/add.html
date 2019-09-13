@@ -1,0 +1,78 @@
+<title>添加产品</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>产品</cite></a>
+        <a href="#/product/list/"><cite>产品列表</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">添加产品</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="product-product-add-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="layui-bg-red">*</span>产品名称</label>
+                    <div class="layui-input-inline">            
+                        <input type="text" name="name" value="" lay-verify="required" placeholder="请输入产品名称" autocomplete="off" class="layui-input">           
+                    </div>        
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="layui-bg-red">*</span>产品分类</label>
+                    <div class="layui-form layui-input-inline" lay-filter="product-product-add-selectcategory">            
+                        <select id="product-product-add-cat" name="pcid" lay-verify="required">
+                            <option value="">请选择产品分类</option>
+                        </select>           
+                    </div>        
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">产品介绍</label>
+                    <div class="layui-input-block">
+                        <textarea name="introduce" placeholder="请输入产品描述信息" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="button" lay-submit lay-filter="product-product-add-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['admin', 'form'], function(){
+        var $ = layui.jquery,
+            admin = layui.admin,
+            form = layui.form;
+
+        admin.req({
+            url: layui.cache.baseapi + '/api/product.product/getcategory',
+            dataType: 'json',
+            type: 'post',
+            success: function (data) {
+                $.each(data.data.list, function (index, item) {
+                    $('#product-product-add-cat').append(new Option(item.name, item.pcid));  // 下拉菜单里添加元素
+                });
+                form.render('select', 'product-product-add-selectcategory');
+            }
+        });
+
+        //监听提交
+        form.on('submit(product-product-add-form-submit)', function (data) {                         
+            admin.req({
+                url: layui.cache.baseapi + '/api/product.product/add',
+                type: 'POST',
+                data: data.field,
+                done: function(res) {
+                    form.val("product-product-add-form", {//重置表单
+                        "name": "",
+                        "pcid": "0"
+                        ,"introduce": ""
+                    });
+                    layer.msg(res.msg, {icon: 1 });
+                }
+            });   
+        });
+    });
+</script>

@@ -1,0 +1,219 @@
+<style>
+    .layui-table td, .layui-table th {
+        text-align: center;
+    }
+    tr:hover textarea{
+        background-color: #f2f2f2 !important;
+    }
+</style>
+<title>员工考勤统计</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>考勤管理</cite></a>
+        <a href="#/all/index/"><cite>员工考勤统计</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">员工考勤统计</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="check-all-index-form">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <input type="text" name="start" class="layui-input" id="start" placeholder="开始时间" style="display: inline;width: 37%;">
+                        <span>-</span>
+                        <input type="text" name="end" class="layui-input" id="end" placeholder="结束时间" style="display: inline;width: 37%;">
+                        <button class="layui-btn" lay-submit lay-filter="check-rank-index-form-submit" style="margin-left: 10px;">立即搜索</button>
+                        <div style="width: 300px;height: 35px;margin-top:20px;">
+                            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-lastWeek-form-submit">上周</button>
+                            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-thisWeek-form-submit">本周</button>
+                            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-lastMonth-form-submit">上月</button>
+                            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-thisMonth-form-submit">本月</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-row">
+                <div class="layui-col-xs4 layui-col-sm3 layui-col-md2 layui-col-lg2">
+                    <ul id="check-all-data-dtree" class="dtree" data-id="0" style="width:100%"></ul>
+                </div>
+                <div class="layui-col-xs8 layui-col-sm9 layui-col-md10 layui-col-lg10">
+                    <table id="check-all-data-table" lay-filter="check-all-index-table-tool"></table>
+                </div>
+            </div>
+        </div>
+        <script type="text/html" id="check-all-operate">
+            <button class="layui-btn layui-btn-xs" lay-event="detail">查看详情</button>
+        </script>
+    </div>
+</div>
+<!-- 渲染 -->
+<script type="text/html" id="check-all-btn-detail-tpl">
+    <blockquote class="layui-elem-quote">考勤详情</blockquote>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>类型</th>
+            <th>状态</th>
+            <th>打卡时间</th>
+            <th>设备</th>
+        </tr>
+        </thead>
+        <tbody>
+        {{# layui.each(d.data.record, function(index, item){ }}
+        <tr>
+            <td>{{item.checkType}}</td>
+            <td>{{item.locationResult}}</td>
+            <td>{{item.userCheckDate}}</td>
+            <td>{{item.sourceType}}</td>
+        </tr>
+        {{# });}}
+        </tbody>
+    </table>
+    <blockquote class="layui-elem-quote">缺勤说明</blockquote>
+    <table class="layui-table">
+        <thead>
+        </thead>
+        <tbody>
+        <tr>
+            <th>{{d.data.data.remark}}</th>
+        </tr>
+        </tbody>
+    </table>
+</script>
+<script>
+    layui.data.done = function(d){
+        layui.use(['form'], function(){
+            var form = layui.form;
+            form.render(null, 'check-all-index-form');
+        });
+    };
+    layui.use(['laydate', 'form', 'table', 'admin', 'laytpl', 'jquery', 'element', 'dtree', 'table', 'layer'], function(){
+        var laydate = layui.laydate
+            ,table = layui.table
+            ,form = layui.form
+            ,laytpl=layui.laytpl
+            ,$=layui.jquery
+            ,element = layui.element
+            ,admin = layui.admin
+            ,dtree = layui.dtree
+            ,layer = layui.layer;
+
+        layui.link(layui.setter.base + 'style/extend/dtree/dtree.css?v=' + layui.admin.v);
+        layui.link(layui.setter.base + 'style/extend/dtree/dtreefont.css?v=' + layui.admin.v);
+
+        //监听搜索
+        form.on('submit', function(data){
+            var field = data.field, shortcut = '' ;
+            if (data.elem.innerText == '上周') {
+                field.start = '';
+                field.end = '';
+                shortcut = 'lastWeek';
+            } else if (data.elem.innerText == '本周') {
+                field.start = '';
+                field.end = '';
+                shortcut = 'thisWeek';
+            } else if (data.elem.innerText == '上月') {
+                field.start = '';
+                field.end = '';
+                shortcut = 'lastMonth';
+            } else if (data.elem.innerText == '本月') {
+                field.start = '';
+                field.end = '';
+                shortcut = 'thisMonth';
+            }
+            field.shortcut = shortcut;
+            //执行重载
+            table.reload('check-all-data-table', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                where: field
+            });
+            laydate.render({
+                elem: '#start'
+            });
+            laydate.render({
+                elem: '#end'
+            });
+        });
+
+        dtree.render({
+            elem: "#check-all-data-dtree",//绑定元素
+            initLevel: 5,
+            url: layui.cache.baseapi + '/api/check.All/index?field=field',
+            method: 'post',
+            dataStyle: "layuiStyle",
+            response:{message:"msg",statusCode:0}
+        });
+        dtree.on("node('check-all-data-dtree')" ,function(obj){
+            //执行重载
+            table.reload('check-all-data-table', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                where: {
+                    name: obj.param.context
+                },
+                done: function(d){
+                    $(".text").parent().css("min-height","100px")
+                }
+            });
+        });
+        //执行laydate实例
+        laydate.render({
+            elem: '#start'
+        });
+        laydate.render({
+            elem: '#end'
+        });
+
+        table.render({
+            elem: '#check-all-data-table'
+            ,url: layui.cache.baseapi + '/api/check.All/index'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                 {field: 'date', title: '日期', width: 140, align: 'center'}
+                ,{field: 'totalduty', title: '实际工作时长（小时）', width: 190, align: 'center'}
+                ,{field: 'totalabsence', title: '缺勤时长（小时）', width: 160, align: 'center'}
+                ,{field: 'absence_section', title: '缺勤节数', width:100, align: 'center'}
+                ,{field:'content', title: '内容',width: 330, templet:'#allcontent'}
+                ,{title: '操作', toolbar: '#check-all-operate', width:120, align:'center'},
+            ]],
+            done:function () {
+                $(".text").parent().css("min-height","100px")
+            }
+        });
+
+        //监听工具条
+        table.on('tool(check-all-index-table-tool)', function(obj){ //注：tool是工具条事件名，test是table原始容器的属性 lay-filter="对应的值"
+            var data = obj.data; //获得当前行数据
+            var tr = obj.tr; //获得当前行 tr 的DOM对象
+            if(obj.event == 'detail'){
+                admin.req({
+                    url: layui.cache.baseapi + '/api/check.All/details',
+                    data: {item: data.item},
+                    done: function(res){
+                        layui.use(['laytpl', 'layer'], function(){
+                            var laytpl = layui.laytpl;
+                            var layer = layui.layer;
+                            laytpl($('#check-all-btn-detail-tpl').html()).render(res, function(html){
+                                layer.open({
+                                    title: '工作详情',
+                                    area: '700px',
+                                    content: html,
+                                });
+                            });
+                        });
+                    }
+                });
+            }
+        });
+    });
+</script>
+<!-- 内容 -->
+<script type="text/html" id="allcontent">
+    <textarea name="content" disabled style="width: 100%;height: 100px;background-color: #fff;border: 0px;transition-delay: 0.07s;" class="text">
+        {{d.content}}
+    </textarea>
+</script>

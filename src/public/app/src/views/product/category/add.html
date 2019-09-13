@@ -1,0 +1,64 @@
+<title>添加分类</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>产品</cite></a>
+        <a href="#/product/class/"><cite>分类管理</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">添加分类</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="product-category-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label"><span class="layui-bg-red">*</span>分类名称</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" value="" lay-verify="required" placeholder="请输入分类名称" autocomplete="off" class="layui-input">
+                    </div>        
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">分类描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="remark" placeholder="请输入分类描述信息" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序权重</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="listorder" value="50" lay-verify="number" placeholder="数字越大排序越靠前..." autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="button" lay-submit lay-filter="product-category-add-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['admin', 'form'], function(){
+        var $ = layui.jquery,
+            admin = layui.admin,
+            form = layui.form;
+
+        //监听提交
+        form.on('submit(product-category-add-form-submit)', function (data) {                                
+            admin.req({
+                url: layui.cache.baseapi + '/api/product.category/add',
+                type: 'POST',
+                data: data.field,
+                done: function(res) {
+                    form.val("product-category-form", {//重置表单
+                        "name": "",
+                        "remark": ""
+                        ,"listorder": 50
+                    });
+                    layer.msg(res.msg, {icon: 1 });
+                }
+            });   
+        });
+    });
+</script>

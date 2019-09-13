@@ -1,0 +1,32 @@
+.gk-date {
+  padding: 30rpx;
+  background-color: #fff;
+  border-radius: 2rpx;
+}
+
+.gk-date .picker {
+  width: 60%;
+  display: inline-block;
+}
+
+.gk-picker {
+  padding: 0 20rpx;
+}
+
+.gk-picker-weekday {
+  color: #4486f4;
+  padding: 0 20rpx;
+}
+
+.gk-date-ctrl {
+  width: 40%;
+  display: inline-block;
+  text-align: right;
+}
+
+.gk-date-ctrl-down, .gk-date-ctrl-up {
+  padding: 0 40rpx;
+  color: #afafaf;
+  font-size: 40rpx;
+  vertical-align: top;
+}

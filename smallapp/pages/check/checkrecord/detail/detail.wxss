@@ -1,0 +1,17 @@
+.detail{
+  background-color: #fff;
+  overflow: hidden;
+}
+.de-title {
+  text-align: center;
+  margin: 20rpx 0 30rpx;
+  font-size: 36rpx;
+}
+
+.top {
+  color: green;
+}
+
+.bottom {
+  color: red;
+}

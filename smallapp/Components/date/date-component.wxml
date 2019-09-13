@@ -1,0 +1,12 @@
+<view class='gk-date'>
+  <picker class="picker" mode="date" value="{{date}}" start="2019-07-01" end="{{dateNow}}" bindchange="bindDateChange">
+    <view class="gk-picker">
+      {{date}}
+      <text class="gk-picker-weekday">周{{week}}</text>
+    </view>
+  </picker>
+  <view class='gk-date-ctrl'>
+    <text class='gk-date-ctrl-up' bindtap='dateUp' decode='true'>&lt;</text>
+    <text class='gk-date-ctrl-down' bindtap='dateDown' decode='true'>&gt;</text>
+  </view>
+</view>

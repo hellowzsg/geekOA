@@ -1,0 +1,43 @@
+<wxs module='zjj'>
+  var breviary = function(s) {
+    return s.slice(0, 35) + '...'
+  }
+  module.exports = {
+    breviary: breviary,
+  };
+</wxs>
+<view class="container">
+  <date-component binddateUp='request' binddateDown='request' binddate='request'></date-component>
+  <view class='gk-logs'>
+    <view wx:for='{{logList}}' wx:key='' wx:for-item='item' wx:for-index='idx' class='gk-log'>
+      <view class='gk-log-meta'>
+        <text class='gk-log-meta-name'>{{item.username}}</text>
+      </view>
+      <view class='gk-log-content'>
+        <!-- 我的日志 -->
+        <view wx:if='{{myUid===item.uid}}'>
+          <view class='gk-log-content-text'>
+            <textarea bindinput='modifyInput' value='{{myContent}}' disabled='{{!isModify}}' focus='{{isModify}}' auto-height='true' maxlength='-1'></textarea>
+          </view>
+          <view class='gk-log-btn'>
+            <button hidden='{{isModify}}' bindtap='modifyBtn' class='gk-log-btn-modify' hover-class="gk-log-btn-modify-act" size='mini'>修改</button>
+            <button hidden='{{!isModify}}' bindtap='cancelLog' class='gk-log-btn-cancel' data-content='{{item.content}}' size='mini'>取消</button>
+            <button hidden='{{!isModify}}' bindtap='saveLog' class='gk-log-btn-save' hover-class="gk-log-btn-modify-act" data-lid='{{item.lid}}' size='mini'>保存</button>
+          </view>
+        </view>
+        <!-- 我的日志 -->
+        <!-- 其他人的日志 -->
+        <view wx:else>
+          <view class='gk-log-content-text'>
+            <textarea value='{{currentLid===item.lid?item.content:zjj.breviary(item.content)}}' disabled='true' auto-height='true' maxlength='-1'></textarea>
+          </view>
+          <view class='gk-log-btn'>
+            <button data-lid='{{item.lid}}' bindtap='seeDetail' class='gk-log-btn-see' size='mini'>{{item.lid===currentLid?'收起':'展开'}}</button>
+          </view>
+        </view>
+        <!-- 其他人的日志 -->
+      </view>
+    </view>
+    <view wx:if='{{isJournal}}' class='gk-log-none'>今天没有日志哦(ˉ▽ˉ；)...</view>
+  </view>
+</view>

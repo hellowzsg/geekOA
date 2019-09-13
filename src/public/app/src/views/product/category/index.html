@@ -1,0 +1,93 @@
+<title>分类管理</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>产品</cite></a>
+        <a><cite>分类管理</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">分类列表</div>
+        <div class="layui-card-body">
+            <table id="LAY-product-class" lay-filter="LAY-product-class"></table>
+            <script type="text/html" id="layuiadmin-product-class-bar">
+            {{#  if(layui.admin.checkauth('product.category.edit')){ }}
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" href="#/product/category/edit/pcid={{d.pcid}}"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+            {{#  } }}
+            {{#  if(layui.admin.checkauth('product.category.del')){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            {{#  } }}
+            </script>
+            <script type="text/html" id="LAY-product-class-toolbar">
+            {{#  if(layui.admin.checkauth('product.category.add')){ }}
+                <div class="layui-btn-container">
+                    <a class="layui-btn layui-btn-sm" href="#/product/category/add" data-type="add">添加</a>
+                </div>
+            {{#  } }}
+            </script>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+layui.use(['admin', 'table', 'form'], function(){
+    var $ = layui.jquery,
+        admin = layui.admin,
+        table = layui.table;
+        //分类管理
+        table.render({
+            elem: '#LAY-product-class',
+            defaultToolbar: ['filter'],
+            toolbar: '#LAY-product-class-toolbar',
+            page: true, 
+            limit: 10, 
+            url: layui.cache.baseapi + '/api/product.category/index', //接口
+            cols: [[
+                { field: 'pcid', width: 80, title: 'ID'}, 
+                { field: 'name', title: '分类名', minWidth: 150, sort: true  }, 
+                { field: 'listorder', title: '排序权重', minWidth: 100, edit: 'text'}, 
+                { field: 'remark', title: '分类描述', minWidth: 300 }, 
+                { field: 'createtime', title: '添加时间', minWidth: 180, hide: true}, 
+                { title: '操作', width: 150, align: 'center', toolbar: '#layuiadmin-product-class-bar' }
+            ]], 
+            text: {
+                none: '暂无相关数据'
+            }
+        });
+        //监听单元格编辑
+        table.on('edit(LAY-product-class)', function(obj) {
+            var value = obj.value, //得到修改后的值
+            data = obj.data, //得到所在行所有键值
+            field = obj.field; //得到字段
+            if(field == 'listorder') {
+                admin.req({
+                    url: layui.cache.baseapi + '/api/product.category/listorder',
+                    type: 'POST',
+                    data: {pcid: data.pcid, listorder: value},
+                    done: function() {
+                        layer.msg('排序权重已更新');
+                        table.reload('LAY-product-class');
+                    }
+                });
+            }        
+        });
+        //监听工具条
+        table.on('tool(LAY-product-class)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'del') {
+                layer.confirm('确定删除此分类？', function (index) {
+                    admin.req({
+                        url: layui.cache.baseapi + '/api/product.category/del',
+                        type: 'POST',
+                        data: {pcid: data.pcid},
+                        done: function() {
+                            obj.del();
+                            layer.close(index);
+                        }
+                    });
+                });
+            }
+        });
+});
+</script>

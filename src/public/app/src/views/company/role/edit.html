@@ -1,0 +1,111 @@
+<title>编辑角色</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>公司管理</cite></a>
+        <a href="#/company/role/"><cite>角色管理</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">编辑角色</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="company-role-edit-form">
+            <script type="text/html" template lay-url="{{layui.cache.baseapi}}/api/company.role/info" lay-data="{{JSON.stringify(layui.router().search)}}" lay-type="post" lay-done="layui.data.company_role_edit_done(d)">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色名称</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" name="name" value="{{ d.data.authgroup.name || '' }}" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">角色授权</label>
+                        <div class="layui-input-block">
+                            <div id="LAY-company-role-edit-form-rules"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">数据权限</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="data_rules" value="1" title="个人">
+                        <input type="radio" name="data_rules" value="2" title="所属部门">
+                        <input type="radio" name="data_rules" value="3" title="所属部门及下属部门">
+                        <input type="radio" name="data_rules" value="4" title="全公司">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="status" value="1" title="可用">
+                        <input type="radio" name="status" value="2" title="禁用">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text layui-col-md8 layui-col-lg7">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea name="remark" placeholder="请输入备注信息" class="layui-textarea">{{ d.data.authgroup.remark || '' }}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" name="groupid" value="{{ d.data.authgroup.groupid }}" >
+                        <input type="button" lay-submit lay-filter="company-role-edit-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </script>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.data.company_role_edit_done = function(d){
+        layui.use(['admin', 'form', 'layer', 'authtree'], function(){
+            var $ = layui.$,
+                admin = layui.admin,
+                form = layui.form,
+                layer = layui.layer,
+                authtree = layui.authtree;
+
+            //权限节点数据
+            var trees = authtree.listConvert(d.data.rules, {
+                primaryKey: 'alias'
+                ,startPid: '0'
+                ,parentKey: 'palias'
+                ,nameKey: 'name'
+                ,valueKey: 'alias'
+                ,checkedKey: d.data.checkedId
+            });
+            authtree.render('#LAY-company-role-edit-form-rules', trees, {
+                inputname: 'ruleids[]', 
+                layfilter: 'lay-company-role-edit-check-auth', 
+                autowidth: true
+            });
+
+            $("input[name='data_rules'][value="+d.data.authgroup.data_rules+"]").prop("checked", "checked");
+            $("input[name='status'][value="+d.data.authgroup.status+"]").prop("checked", "checked");
+
+            form.render(null, 'company-role-edit-form');
+
+            //监听提交
+            form.on('submit(company-role-edit-form-submit)', function (data) {
+                admin.req({
+                    url: layui.cache.baseapi + '/api/company.role/edit',
+                    type: 'POST',
+                    data: data.field,
+                    done: function(res) {
+                        layer.msg(res.msg, {
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        },
+                        function(){
+                            admin.closeThisTabs();//开启多标签页时关闭当前tab页面
+                            location.hash = '/company/role/'; //跳转到角色列表页
+                        });
+                    }
+                });   
+            });
+        });
+    };
+</script>

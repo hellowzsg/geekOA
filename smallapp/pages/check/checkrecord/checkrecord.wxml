@@ -1,0 +1,64 @@
+<wxs module="division">
+  var getT = function(t) {
+    var h = (t / 60).toFixed();
+    var m = t % 60;
+    return (h == 0 ? "" : h + "时") + (m == 0 ? "" : (m > 9 ? m : '0' + m) + "分");
+  }
+  module.exports.getT = getT;
+</wxs>
+<view class="container">
+  <date-component binddateUp='request' binddateDown='request' binddate='request'></date-component>
+  <view wx:if='{{isRecord}}'>
+    <view class='gk-check-statis'>
+      <view class='statis-item'>
+        <text class='item-num-total'>{{record.statis.at}}/{{record.statis.total}}</text>
+        <text class='item-info-total'>出勤情况</text>
+      </view>
+      <view class='statis-item'>
+        <text class='item-num-ab'>{{record.statis.ab}}</text>
+        <text class='item-info-ab'>未达标(人)</text>
+      </view>
+      <view class='statis-item'>
+        <text class='item-num-absence'>{{record.statis.absence}}</text>
+        <text class='item-info-absence'>旷工(人)</text>
+      </view>
+    </view>
+    <view class='record-tabs'>
+      <!-- 标题 -->
+      <view class='tab' data-is='at' bindtap='seeMore'>
+        <text style="{{isAt?'border-top: 10rpx solid black;':'border-left:10rpx solid black;'}}"></text>已打卡({{record.statis.at}})</view>
+      <!-- 标题 -->
+      <!-- 内容 -->
+      <view class='tab-items'>
+        <block wx:for='{{record.at}}' wx:key>
+          <!-- 在这里添加查看详情打卡记录的按钮 -->
+          <view class='item' hidden='{{!isAt}}' data-aid='{{item.aid}}' bindtap='detailAt'>
+            <text>{{item.username}}</text>
+            <text>{{division.getT(item.duty)}}</text>
+          </view>
+        </block>
+      </view>
+      <!-- 内容 -->
+      <view class='tab' data-is='ab' bindtap='seeMore'>
+        <text style="{{isAb?'border-top: 10rpx solid black;':'border-left:10rpx solid black;'}}"></text>未达标({{record.statis.ab}})</view>
+      <view class='tab-items'>
+        <!-- 在这里添加填写缺勤说明的按钮 -->
+        <block wx:for='{{record.ab}}' wx:key>
+          <view class='item' hidden='{{!isAb}}' data-aid='{{item.aid}}' data-absence='{{division.getT(item.absence)}}' data-date='{{item.date}}' data-remark='{{item.remark}}' data-uid='{{item.uid}}' bindtap='detailAb'>
+            <text>{{item.username}}</text>
+            <text>{{division.getT(item.absence)}}</text>
+          </view>
+        </block>
+      </view>
+      <view class='tab' data-is='abt' bindtap='seeMore'>
+        <text style="{{isAbt?'border-top: 10rpx solid black;':'border-left:10rpx solid black;'}}"></text>旷工({{record.statis.absence}})</view>
+      <view class='tab-items'>
+        <view class='item' wx:for='{{record.absence}}' hidden='{{!isAbt}}' data-aid='{{item.aid}}' data-absence='{{division.getT(item.absence)}}' data-date='{{item.date}}' data-remark='{{item.remark}}' data-uid='{{item.uid}}' bindtap='detailAb' wx:key>
+          <text>{{item.username}}</text>
+          <text>{{division.getT(item.absence)}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view wx:else class='gk-log-none'>今天没有记录(ˉ▽ˉ；)...</view>
+</view>

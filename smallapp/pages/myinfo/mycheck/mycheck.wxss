@@ -1,0 +1,166 @@
+.mycheck {
+  /* background-color: #fff; *//* padding: 20rpx; */
+}
+
+/* 时间选择器 */
+
+.select-time {
+  padding: 20rpx;
+  background-color: #fff;
+  border-radius: 2rpx;
+  margin: 20rpx 0;
+}
+
+.select-time picker {
+  width: 60%;
+  display: inline-block;
+  text-align: center;
+}
+
+.time-picker {
+  padding: 0 20rpx;
+}
+
+.select-time-ctrl {
+  width: 40%;
+  display: inline-block;
+  text-align: right;
+}
+
+.select-time-ctrl-down, .select-time-ctrl-up {
+  padding: 0 40rpx;
+  color: #afafaf;
+  font-size: 40rpx;
+  vertical-align: top;
+}
+
+/* 时间选择器 */
+
+/* 日历 */
+
+.cal {
+  margin: 20rpx 0;
+  /* padding: 10rpx; */
+  background-color: #fff;
+}
+
+.cal-hd, .cal-bd, .cal-ft {
+  width: 700rpx;
+  display: flex;
+  margin: 0 auto;
+}
+
+.cal-hd {
+}
+
+.cal-bd {
+  flex-wrap: wrap;
+}
+
+.cal-record-none {
+  font-size: 40rpx;
+  color: #b5b5b5;
+  text-align: center;
+  width: 100%;
+  height: 420rpx;
+  line-height: 420rpx;
+}
+
+.cal-item {
+  display: inline-block;
+  align-items: center;
+  width: 100rpx;
+  height: 100rpx;
+  text-align: center;
+  line-height: 100rpx;
+  box-sizing: border-box;
+}
+
+.cal-item>text {
+  display: inline-block;
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 100%;
+  line-height: 60rpx;
+}
+
+.item-now {
+  background-color: rgba(68, 133, 244, 0.1);
+}
+
+.item-last {
+  opacity: 0.2;
+}
+
+.card-normal {
+  background-color: rgba(68, 133, 244, 0.1);
+}
+
+.card-at {
+  background-color: #4486f4;
+}
+
+.card-ab {
+  background-color: #fbbe05;
+}
+
+.card-absence {
+  background-color: #ec4335;
+}
+
+.cal-ft {
+  padding: 20rpx;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.cal-ft text {
+  padding: 0 20rpx;
+}
+
+.ft-at {
+  color: #4486f4;
+}
+
+.ft-ab {
+  color: #fbbe05;
+}
+
+.ft-absence {
+  color: #ec4335;
+}
+
+/* 日历 */
+
+/* 统计图 */
+
+.chart {
+  /* width: 100%; */
+  background-color: #fff;
+  margin: 20rpx 0 0;
+  padding: 20rpx 0;
+}
+
+.chart-title {
+  font-size: 36rpx;
+  text-align: right;
+  padding: 40rpx 0;
+  color: #3c3c3c;
+}
+
+.chart-flex-ctrl {
+  display: inline-block;
+  width: 35%;
+  text-align: center;
+}
+
+.chart-flex-ctrl text {
+  padding: 0 20rpx;
+}
+
+.canvas {
+  width: 100%;
+  height: 300px;
+}
+
+/* 统计图 */

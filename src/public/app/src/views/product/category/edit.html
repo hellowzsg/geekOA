@@ -1,0 +1,69 @@
+<title>编辑分类</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>产品</cite></a>
+        <a href="#/product/class/"><cite>分类管理</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">编辑</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="product-category-form">
+            <script type="text/html" template lay-url="{{layui.cache.baseapi}}/api/product.category/info" lay-data="{{JSON.stringify(layui.router().search)}}" lay-type="post">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">分类名</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="name" value="{{ d.data.name || '' }}" lay-verify="required" placeholder="请输入..." autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text">
+                    <label class="layui-form-label">分类描述</label>
+                    <div class="layui-input-block">
+                        <textarea name="remark" placeholder="请输入内容" class="layui-textarea">{{ d.data.remark || '' }}</textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">排序权重</label>
+                    <div class="layui-input-inline">
+                        <input type="text" name="listorder" value="{{ d.data.listorder || '' }}" lay-verify="required|number" placeholder="请输入..." autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" name="pcid" value="{{ d.data.pcid }}" >
+                        <input type="button" lay-submit lay-filter="product-category-edit-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </script>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['admin', 'form'], function(){
+        var $ = layui.jquery,
+            admin = layui.admin,
+            form = layui.form;
+
+        //监听提交
+        form.on('submit(product-category-edit-form-submit)', function (data) {
+            admin.req({
+                url: layui.cache.baseapi + '/api/product.category/edit',
+                type: 'POST',
+                data: data.field,
+                done: function(res) {
+                    layer.msg(res.msg, {
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        },
+                    function(){
+                        admin.closeThisTabs();//开启多标签页时关闭当前tab页面
+                        location.hash = '/product/category/'; //跳转到产品分类列表页
+                    });
+                }
+            });   
+        });
+    });
+</script>

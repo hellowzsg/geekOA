@@ -1,0 +1,48 @@
+<title>添加日志</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>日志管理</cite></a>
+        <a href="#/addlog/index/"><cite>添加日志</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">添加日志</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="log-addlog-index-form">
+                <div class="layui-form-item layui-form-text">
+                        <textarea name="content" required lay-verify="required" placeholder="请输入日志内容" class="layui-textarea" rows="13"></textarea>
+                </div>
+
+                <div class="layui-form-item">
+                    <div class="layui-input-inline">
+                        <input type="button" lay-submit lay-filter="log-addlog-index-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['admin', 'form', 'layer'], function(){
+        var $ = layui.$,
+            admin = layui.admin,
+            form = layui.form,
+            layer = layui.layer;
+
+        form.render(null, 'log-addlog-index-form');
+
+        //监听提交
+        form.on('submit(log-addlog-index-form-submit)', function (data) {
+            console.log(data);
+            admin.req({
+                url: layui.cache.baseapi + '/api/log.Addlog/add',
+                type: 'POST',
+                data: data.field,
+                done: function(res) {
+                    layer.msg(res.msg, {icon: 1 });
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,65 @@
+.myinfo-box {
+  position: relative;
+  margin: 0 auto;
+  width: 100%;
+  height: 450rpx;
+  overflow: hidden;
+  background-color: #fff;
+}
+
+.myinfo-box .myinfo-bg {
+  width: 100%;
+  height: 330rpx;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 0 0 100% 100% / 100% 100% 15% 15%;
+  z-index: 1;
+}
+
+.myinfo-box .myinfo-image {
+  position: relative;
+  margin: 50rpx auto 30rpx;
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 100%;
+  overflow: hidden;
+  border: 1px solid #dfdfdf;
+  box-shadow: 0 0 6rpx 4rpx rgba(220, 220, 220, 0.5);
+  z-index: 2;
+}
+
+.myinfo-box .myinfo-name {
+  position: relative;
+  font-size: 40rpx;
+  color: white;
+  text-align: center;
+  z-index: 2;
+}
+
+.myinfo-box .myinfo-details {
+  margin: 55rpx 0;
+  text-align: center;
+  color: #707070;
+}
+
+.myinfo-details-item {
+  display: inline-block;
+  padding: 15rpx 90rpx;
+}
+
+.myinfo-details-item:nth-child(1) {
+  border-right: 1px solid #dfdfdf;
+}
+
+.myinfo-details-icon {
+  vertical-align: middle;
+  width: 36rpx;
+  height: 36rpx;
+  transform: translate(0,-6rpx);
+  padding: 0 10rpx;
+}
+
+.myinfo-details-check, .myinfo-details-journal {
+  font-size: 34rpx;
+}

@@ -1,0 +1,125 @@
+<title>设置角色员工</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>公司管理</cite></a>
+        <a href="#/company/role/"><cite>角色管理</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">设置角色员工</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="company-role-user-form">
+            <script type="text/html" template lay-url="{{layui.cache.baseapi}}/api/company.role/user" lay-data="{{JSON.stringify(layui.router().search)}}" lay-type="post" lay-done="layui.data.company_role_user_done(d)">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">角色名称</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="text" name="rolename" value="{{ d.data.rolename || '' }}" disabled="disabled" />
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">当前员工</label>
+                        <div class="layui-input-block">
+                            <div id="LAY-company-role-user-form-users"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label">添加员工</label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="company-role-user-form-user" data-values="0" data-name="" name="user" value="" placeholder="请输入员工姓名" lay-verify="companyRoleUserAddUser" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="hidden" name="groupid" value="{{ d.data.groupid }}" >
+                        <input type="button" lay-submit lay-filter="company-role-user-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </script>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.data.company_role_user_done = function(d){
+        layui.use(['admin', 'form', 'layer', 'autocomplete', 'checkbox'], function(){
+            var $ = layui.$,
+                admin = layui.admin,
+                form = layui.form,
+                layer = layui.layer,
+                autocomplete = layui.autocomplete,
+                checkbox = layui.checkbox;
+
+            layui.link(layui.setter.base + 'style/extend/autocomplete.css?v=' + layui.admin.v);
+            layui.link(layui.setter.base + 'style/extend/checkbox.css?v=' + layui.admin.v);
+
+            checkbox({
+                elem: "#LAY-company-role-user-form-users"
+                , nodes: d.data.users
+                , del: function (node) {
+                    admin.req({
+                        url: layui.cache.baseapi + '/api/company.role/deluserrole',
+                        type: 'POST',
+                        data: {uid: node.id, groupid: d.data.groupid},
+                        done: function(res) {
+                            layer.msg(res.msg, {
+                                icon: 1,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            },
+                            function(){
+
+                            });
+                        }
+                    }); 
+                    return true;
+                }
+            });
+
+            form.render(null, 'company-role-user-form');
+
+            //员工选择
+            autocomplete.render({
+                elem: $('#company-role-user-form-user'),
+                url: layui.cache.baseapi + '/api/company.role/users',
+                template_val: '{{d.name}}',
+                template_txt: '{{d.name}} <span class=\'layui-badge layui-bg-gray\'>{{d.sex}}</span> <{{d.department}}>',
+                onselect: function (resp) {
+                    $('#company-role-user-form-user').data('values', resp.id);                  
+                    $('#company-role-user-form-user').data('name', resp.name);                  
+                }
+            });
+
+            form.verify({
+                //验证员工
+                companyRoleUserAddUser: function (value) {
+                    if (!value === false && value !== $('#company-role-user-form-user').data('name')) {
+                        return '员工信息有误, 请根据提示选择员工';
+                    }
+                }
+            });
+
+            //监听提交
+            form.on('submit(company-role-user-form-submit)', function (data) {
+                data.field.uid = $('#company-role-user-form-user').data('values');
+                admin.req({
+                    url: layui.cache.baseapi + '/api/company.role/adduserrole',
+                    type: 'POST',
+                    data: data.field,
+                    done: function(res) {
+                        layer.msg(res.msg, {
+                            icon: 1,
+                            time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                        },
+                        function(){
+                            admin.closeThisTabs();//开启多标签页时关闭当前tab页面
+                            location.hash = '/company/role/';
+                        });
+                    }
+                });
+            });
+        });
+    };
+</script>

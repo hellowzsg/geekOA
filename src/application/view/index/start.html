@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>{$title}</title>
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <link rel="stylesheet" href="layui/css/layui.css" media="all">
+</head>
+<body>
+  <div id="LAY_app"></div>
+  <script src="layui/layui.js"></script>
+  <script>
+  layui.config({
+    name: '{$sitename}', //系统名称
+    pageTabs: {$pageTabs},//是否开启页面选项卡功能。单页版不推荐开启
+    debug: {$debug}, //是否开启调试模式。如开启，接口异常时会抛出异常 URL 等信息
+    interceptor: {$interceptor}, //是否开启未登入拦截
+    tableName: '{$tableName}',
+    baseapi: '',
+    base: '../{$base}/',
+    version: '{$version}'
+  }).use('index');
+  </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+/* 时间选择器 */
+
+.section {
+  margin: 20rpx 0 0;
+  padding: 30rpx 20rpx;
+  font-size: 36rpx;
+  background-color: #fff;
+  border-radius: 10rpx;
+  color: #707070;
+  display: flex;
+  justify-content: space-around;
+}
+
+.section picker {
+  text-align: center;
+  width: 50%;
+}
+
+.section picker:first-child {
+  border-right: 1px solid #dfdfdf;
+}
+
+/* 时间选择器 */
+
+/* 顶部我的排名 */
+
+.rank {
+  width: 100%;
+  height: 300rpx;
+  background-color: #7aa8f8;
+  padding-top: 60rpx;
+  border-radius: 10rpx;
+}
+
+.myimage {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 100%;
+  overflow: hidden;
+  margin: 0 auto 20rpx;
+  background-color: #fff;
+  box-shadow: 0 0 6rpx 4rpx rgba(220, 220, 220, 0.5);
+}
+
+.ranking {
+  text-align: center;
+  color: #fff;
+  font-size: 50rpx;
+}
+
+/* 顶部我的排名 */
+
+/* 总排名 */
+
+.journal {
+  width: 100%;
+  margin-top: 40rpx;
+  overflow: hidden;
+}
+
+.rank-header {
+  padding: 20rpx;
+  box-shadow: 1rpx 1rpx 2rpx 2rpx #dfdfdf;
+  color: #404040;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-around;
+}
+
+.rank-header text {
+  text-align: center;
+  width: 25%;
+  display: inline-block;
+  border-right: 1px solid #dfdfdf;
+  padding: 5rpx 0;
+}
+
+.rank-header text:last-child {
+  border: none;
+}
+
+.rank-box {
+  padding: 0 20rpx;
+  margin: 10rpx auto;
+  color: #4486f4;
+  background-color: #f6f6f6;
+  display: flex;
+  justify-content: space-around;
+}
+.rank-box:nth-child(odd){
+  background-color: #f9f9f9;
+}
+
+.rank-box text {
+  padding: 20rpx 0;
+  text-align: center;
+  width: 25%;
+  display: inline-block;
+}
+
+.rank-box text:first-child {
+  color: #606060;
+}
+
+.rank-box text:nth-child(2) {
+  color: #303030;
+}
+
+.rank-box text:last-child {
+  border: none;
+}
+
+.rank-box:nth-child(2) text:first-child {
+  color: red;
+}
+
+.rank-box:nth-child(3) text:first-child {
+  color: rgb(255, 115, 0);
+}
+
+.rank-box:nth-child(4) text:first-child {
+  color: orange;
+}
+
+.rank-box:nth-child(5) text:first-child {
+  color: rgb(199, 209, 65);
+}
+
+/* 总排名 */
+
+/* 快捷选择 */
+
+.select {
+  border-top: 1px solid #dfdfdf;
+  padding: 10rpx 20rpx;
+  background-color: #fff;
+  display: flex;
+  justify-content: space-between;
+}
+
+.select view {
+  width: 23%;
+  text-align: center;
+  padding: 5rpx 0;
+  border-radius: 4rpx;
+  color: #707070;
+  border-right: 1px solid #dfdfdf;
+}
+
+.select view:last-child {
+  border: none;
+}
+
+/* 快捷选择 */

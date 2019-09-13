@@ -1,0 +1,124 @@
+<style>
+    .layui-table td, .layui-table th {
+        text-align: center;
+    }
+</style>
+<title>课表详情</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>考勤管理</cite></a>
+        <a href="#/all/coursedetail/"><cite>课表详情</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">课表详情</div>
+        <div class="layui-card-body">
+            <div class="layui-form layui-form-pane" lay-filter="check-all-coursedetail-form">
+                <script type="text/html" template lay-url='{{layui.cache.baseapi}}/api/check.All/coursedetail?field=field' lay-done="layui.data.done(d)">
+                    <div class="layui-form-item">
+                        <div class="layui-inline">
+                            <div class="layui-input-inline" style="width: 250px;">
+                                <select name="week" lay-filter="LAY-classlog-clog-cloglist-grade-select" id="LAY-classlog-clog-cloglist-grade-select-id">
+                                    {{# layui.each(d.data, function(index, item){ }}
+                                    <option value="{{index}}">{{item}}</option>
+                                    {{# });}}
+                                </select>
+                            </div>
+                        <button class="layui-btn" lay-submit lay-filter="check-all-coursedetail-form-submit" style="margin-left: 10px;">立即搜索</button>
+                    </div>
+                </div>
+                </script>
+            </div>
+            </div>
+            <table id="check-all-coursedetail-table" lay-filter="check-all-coursedetail-table"></table>
+        </div>
+    </div>
+<script>
+    layui.data.done = function(d){
+        layui.use(['form'], function(){
+            var form = layui.form;
+            form.render(null, 'check-all-coursedetail-form');
+        });
+    };
+    layui.use(['laydate', 'form', 'table', 'admin', 'laytpl', 'jquery'], function(){
+        var laydate = layui.laydate
+            ,table = layui.table
+            ,form = layui.form
+            ,laytpl=layui.laytpl
+            ,$=layui.jquery
+            ,router = layui.router()
+            ,admin = layui.admin
+            ,id = router.search.id;
+
+        table.render({
+             elem: '#check-all-coursedetail-table'
+            ,url: layui.cache.baseapi + '/api/check.All/coursedetail/?id='+id
+            ,cols: [[ //表头
+                {field: 'week', title: '星期', width: 100,  align: 'center'}
+                ,{field: '1', title: '第一节', align: 'center', templet: '#one'}
+                ,{field: '2', title: '第二节', align: 'center', templet: '#two'}
+                ,{field: '3', title: '第三节', align: 'center', templet: '#three'}
+                ,{field: '4', title: '第四节', align: 'center', templet: '#four'}
+                ,{field: '5', title: '第五节', align: 'center', templet: '#five'}
+            ]]
+        });
+
+        //监听搜索
+        form.on('submit(check-all-coursedetail-form-submit)', function(data){
+            var field = data.field;
+            //执行重载
+            table.reload('check-all-coursedetail-table', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                where: field
+            });
+        });
+    });
+</script>
+<script type="text/html" id="one">
+    {{# if (d[1] === '有课') { }}
+    <span style="color: #01AAED;">{{ d[1] }}</span>
+    {{# } else if(d[1] === '没课') { }}
+    {{ d[1] }}
+    {{# } else { }}
+    <span style="color: #FFB800;">未录入</span>
+    {{# } }}
+</script>
+<script type="text/html" id="two">
+    {{# if (d[2] === '有课') { }}
+    <span style="color: #01AAED;">{{ d[2] }}</span>
+    {{# } else if(d[2] === '没课') { }}
+    {{ d[2] }}
+    {{# } else { }}
+    <span style="color: #FFB800;">未录入</span>
+    {{# } }}
+</script>
+<script type="text/html" id="three">
+    {{# if (d[3] === '有课') { }}
+    <span style="color: #01AAED;">{{ d[3] }}</span>
+    {{# } else if(d[3] === '没课') { }}
+    {{ d[3] }}
+    {{# } else { }}
+    <span style="color: #FFB800;">未录入</span>
+    {{# } }}
+</script>
+<script type="text/html" id="four">
+    {{# if (d[4] === '有课') { }}
+    <span style="color: #01AAED;">{{ d[4] }}</span>
+    {{# } else if(d[4] === '没课') { }}
+    {{ d[4] }}
+    {{# } else { }}
+    <span style="color: #FFB800;">未录入</span>
+    {{# } }}
+</script>
+<script type="text/html" id="five">
+    {{# if (d[5] === '有课') { }}
+    <span style="color: #01AAED;">{{ d[5] }}</span>
+    {{# } else if(d[5] === '没课') { }}
+    {{ d[5] }}
+    {{# } else { }}
+    <span style="color: #FFB800;">未录入</span>
+    {{# } }}
+</script>

@@ -1,0 +1,97 @@
+<title>部门设置</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>公司管理</cite></a>
+        <a><cite>部门设置</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">部门列表</div>
+    <script type="text/html" template>
+        {{#  if(layui.admin.checkauth('company.department.add')){ }}
+        <div class="layui-form layui-card-header layuiadmin-card-header-auto" lay-filter="company-department-index-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <div class="layui-input-inline layui-input-inline-button">
+                        <a href="#/company/department/add/parentid=0" class="layui-btn layui-btn-normal">
+                            <i class="layui-icon layui-icon-add-circle-fine layuiadmin-button-btn"></i>添加部门
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{#  } }}
+    </script>
+        <div class="layui-card-body">
+            <table id="company-department-index-table" lay-filter="company-department-index-table"></table>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+layui.use(['admin', 'treeGrid'], function(){
+    var $ = layui.jquery,
+        admin = layui.admin,
+        treeGrid = layui.treeGrid;
+
+        //树结构表格 参考文档 [https://fly.layui.com/extend/treeGrid/#doc]
+        treeGrid.render({
+            id: 'company-department-index-table',
+            elem: '#company-department-index-table',
+            url: layui.cache.baseapi + '/api/company.department/index', //接口,
+            method: 'get',
+            cellMinWidth: 100,
+            idField: 'id',//必須字段
+            treeId: 'id',//树形id字段名称
+            treeUpId: 'parentid',//树形父id字段名称
+            treeShowName: 'name',//以树形式显示的字段
+            height: '100%',
+            iconOpen: true,//是否显示图标【默认显示】
+            isOpenDefault: true,//节点默认是展开还是折叠【默认展开】
+            loading: true,
+            cols: [[
+                {field:'id',width:100, title: '部门ID', align:'center'},
+                {field:'name', width:350, title: '部门名称'},
+                {field:'num', width: 120, title: '部门人数', align:'center'},
+                {field:'listorder', width:100, title: '排序权重', align:'center'},
+                {title: '操作', align:'center',
+                    templet: function(d){
+                        var html='';
+                        var editBtn = layui.admin.checkauth('company.department.edit') ? '<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" href="#/company/department/edit/id=' + d.id + '"><i class="layui-icon layui-icon-edit"></i>编辑</a>' : '';
+                        if(d.id == 1) {
+                            var delBtn = '';
+                        } else {
+                            var delBtn = layui.admin.checkauth('company.department.del') ? '<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>' : '';
+                        }
+                        var authBtn = layui.admin.checkauth('company.department.setauth') ? '<a class="layui-btn layui-btn-xs" lay-event="auth" href="#/company/department/auth/deptid=' + d.id + '"><i class="layui-icon layui-icon-edit"></i>员工权限</a>' : '';
+                        var leaderauthBtn = layui.admin.checkauth('company.department.setleaderauth') ? '<a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="leaderauth" href="#/company/department/leaderauth/deptid=' + d.id + '"><i class="layui-icon layui-icon-edit"></i>Leader权限</a>' : '';
+                        return editBtn+delBtn+authBtn+leaderauthBtn;
+                    }
+                }
+            ]],
+            page: false
+        });
+
+        treeGrid.on('tool(company-department-index-table)',function (obj) {
+            if(obj.event === 'del') {//删除行
+                if(typeof obj.data.children != 'undefined' && obj.data.children.length > 0) {
+                    layer.alert('该部门下还有子部门，无法删除。若确实想删除该部门请先删除其子部门。');
+                }else {
+                    layer.confirm('确定删除此部门？', function (index) {
+                        admin.req({
+                            url: layui.cache.baseapi + '/api/company.department/del',
+                            type: 'POST',
+                            data: {id: obj.data.id},
+                            done: function() {
+                                obj.del();
+                                layer.close(index);
+                            }
+                        });
+                    });
+                }
+            }
+        });
+    });
+</script>

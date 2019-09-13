@@ -1,0 +1,108 @@
+<title>考勤排行</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>考勤管理</cite></a>
+        <a href="#/rank/index/"><cite>考勤排行</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">考勤排行</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="check-rank-index-form">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <input type="text" name="sdate" class="layui-input" id="rsdate" placeholder="开始时间" style="display: inline;width: 37%;">
+                        <span>-</span>
+                        <input type="text" name="edate" class="layui-input" id="redate" placeholder="结束时间" style="display: inline;width: 37%;">
+                        <button class="layui-btn" lay-submit lay-filter="check-rank-index-form-submit" style="margin-left: 10px;">立即搜索</button>
+                        <div style="width: 300px;height: 35px;margin-top:20px;">
+                            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-lastWeek-form-submit">上周</button>
+                            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-thisWeek-form-submit">本周</button>
+                            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-lastMonth-form-submit">上月</button>
+                            <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-thisMonth-form-submit">本月</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <table id="check-rank-index-table" lay-filter="check-rank-index-table-tool"></table>
+        </div>
+    </div>
+</div>
+<script>
+    layui.data.done = function(d){
+        layui.use(['form'], function(){
+            var form = layui.form;
+            form.render(null, 'check-rank-index-form');
+        });
+    };
+    layui.use(['laydate', 'form', 'table', 'admin', 'laytpl', 'jquery'], function(){
+        var laydate = layui.laydate
+            ,table = layui.table
+            ,form = layui.form
+            ,laytpl=layui.laytpl
+            ,$=layui.jquery
+            ,admin = layui.admin;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#rsdate'
+        });
+        laydate.render({
+            elem: '#redate'
+        });
+
+        table.render({
+            elem: '#check-rank-index-table'
+            ,url: layui.cache.baseapi + '/api/check.rank/index'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'name', title: '姓名', align: 'center'}
+                ,{field: 'sum_duty', title: '总工作时长（小时）', align: 'center'}
+                ,{field: 'sum_absence', title: '总缺勤时长（小时）', align: 'center'}
+                ,{field: 'sum_sign', title: '出勤天数', align: 'center'}
+                ,{field: 'number', title: '名次', align: 'center'}
+            ]]
+        });
+
+        //监听搜索
+        form.on('submit', function(data){
+            var field = data.field, date = '' ;
+            if (data.elem.innerText == '上周') {
+                field.sdate = '';
+                field.edate = '';
+                field.name = '';
+                date = 'lastWeek';
+            } else if (data.elem.innerText == '本周') {
+                field.sdate = '';
+                field.edate = '';
+                field.name = '';
+                date = 'thisWeek';
+            } else if (data.elem.innerText == '上月') {
+                field.sdate = '';
+                field.edate = '';
+                field.name = '';
+                date = 'lastMonth';
+            } else if (data.elem.innerText == '本月') {
+                field.sdate = '';
+                field.edate = '';
+                field.name = '';
+                date = 'thisMonth';
+            }
+            field.date = date;
+            //执行重载
+            table.reload('check-rank-index-table', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                where: field
+            });
+            laydate.render({
+                elem: '#rsdate'
+            });
+            laydate.render({
+                elem: '#redate'
+            });
+        });
+    });
+</script>

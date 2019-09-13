@@ -1,0 +1,85 @@
+<title>角色管理</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>公司管理</cite></a>
+        <a><cite>角色管理</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">角色列表</div>
+        <div class="layui-card-body">
+            <table id="LAY-company-role-index" lay-filter="LAY-company-role-index"></table>
+            <script type="text/html" id="LAY-company-role-index-bar">
+            {{#  if(layui.admin.checkauth('company.role.user')){ }}
+                <a class="layui-btn layui-btn-xs" lay-event="edit" href="#/company/role/user/groupid={{d.groupid}}"><i class="layui-icon layui-icon-edit"></i>设置角色员工</a>
+            {{#  } }}
+            {{#  if(layui.admin.checkauth('company.role.edit')){ }}
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" href="#/company/role/edit/groupid={{d.groupid}}"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+            {{#  } }}
+            {{#  if(layui.admin.checkauth('company.role.del')){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            {{#  } }}
+            </script>
+            <script type="text/html" id="LAY-company-role-index-toolbar">
+                <div class="layui-btn-container">
+                {{#  if(layui.admin.checkauth('company.role.add')){ }}
+                    <a class="layui-btn layui-btn-sm" href="#/company/role/add" data-type="add">添加角色</a>
+                {{#  } }}
+                </div>
+            </script>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    layui.use(['admin', 'table', 'form'], function(){
+        var $ = layui.jquery,
+            admin = layui.admin,
+            table = layui.table;
+            //分类管理
+            table.render({
+                elem: '#LAY-company-role-index',
+                defaultToolbar: ['filter'], 
+                toolbar: '#LAY-company-role-index-toolbar',
+                page: true, 
+                limit: 10, 
+                url: layui.cache.baseapi + '/api/company.role/index', //接口
+                cols: [[
+                    { field: 'groupid', width: 100, title: 'ID', sort: true }, 
+                    { field: 'name', title: '角色名称', minWidth: 80, }, 
+                    { field: 'users', title: '角色员工', minWidth: 300, }, 
+                    { field: 'rulesname', title: '拥有权限', minWidth: 300 }, 
+                    { field: 'data_rules_name', title: '数据权限', minWidth: 100 },
+                    { field: 'remark', title: '备注', minWidth: 150, }, 
+                    { field: 'status', title: '状态', minWidth: 30, templet:function(d){
+                        return d.status == 1 ? "启用" : "禁用";
+                    }}, 
+                    { field: 'createtime', title: '创建时间', minWidth: 180, hide: true }, 
+                    { field: 'updatetime', title: '修改时间', minWidth: 180, hide: true }, 
+                    { title: '操作', width: 280, align: 'center', toolbar: '#LAY-company-role-index-bar' }
+                ]], 
+                text: {
+                    none: '暂无相关数据'
+                }
+            });
+
+            //监听工具条
+            table.on('tool(LAY-company-role-index)', function (obj) {
+                var data = obj.data;
+                if (obj.event === 'del') {
+                    layer.confirm('确定删除此角色？', function (index) {
+                        admin.req({
+                            url: layui.cache.baseapi + '/api/company.role/del',
+                            type: 'POST',
+                            data: {groupid: data.groupid},
+                            done: function() {
+                                obj.del();
+                                layer.close(index);
+                            }
+                        });
+                    });
+                }
+            });
+    });
+</script>

@@ -1,0 +1,300 @@
+<title>添加员工</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>公司管理</cite></a>
+        <a href="#/company/user/"><cite>员工管理</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">添加员工</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="company-user-add-form">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="layui-bg-red">*</span>姓名</label>
+                        <div class="layui-input-inline">            
+                            <input type="text" name="name" value="" lay-verify="required|realname" id="company-user-add-form-name" placeholder="请输入员工姓名" autocomplete="off" class="layui-input">           
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="layui-bg-red">*</span>登录账号</label>
+                        <div class="layui-input-inline">            
+                            <input type="text" name="username" value="" lay-verify="required|username" id="company-user-add-form-username" placeholder="请输入登陆账号, 需唯一" autocomplete="off" class="layui-input">           
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="layui-bg-red">*</span>密码</label>
+                        <div class="layui-input-inline">
+                            <input type="password" name="password" value="" lay-verify="required|pass" placeholder="请输入密码,6-12位" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label"><span class="layui-bg-red">*</span>手机号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="mobile" value="" placeholder="请输入手机号" lay-verify="required|phone" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">身份证号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="idcard" value="" lay-verify="identity" placeholder="请输入身份证号码" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">选择性别</label>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="gender" value="1" title="男" checked>
+                            <input type="radio" name="gender" value="2" title="女">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">微信号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="wechat" value="" placeholder="请输入微信号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">QQ号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="qq" value="" placeholder="请输入QQ号" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">电子邮箱</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="email" value="" placeholder="请输入电子邮箱" lay-verify="email" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">家属</label>
+                        <div class="layui-input-inline">            
+                            <input type="text" name="family" value="" placeholder="请输入员工家属" autocomplete="off" class="layui-input">           
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">家属手机号</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="family_mobile" value="" placeholder="请输入员工家属手机号" lay-verify="phone" autocomplete="off" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">入职日期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="join_date" value="" id="company-user-add-joindate" class="layui-input">
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">在职状态</label>
+                        <div class="layui-input-inline">
+                            <input type="radio" name="incorp" lay-filter="company-user-add-radio-incorp" value="1" title="在职" checked>
+                            <input type="radio" name="incorp" lay-filter="company-user-add-radio-incorp" value="4" title="离职">
+                        </div>
+                    </div>
+                    <div class="layui-inline" id="company-user-add-form-leavedate">
+                        <label class="layui-form-label">离职日期</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="leave_date" value="" placeholder="若是员工已离职请选择" id="company-user-add-leavedate" class="layui-input">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">职位</label>
+                        <div class="layui-input-inline">
+                            <input type="text" name="position" value="" placeholder="请输入员工职位" autocomplete="off" class="layui-input">           
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">账号状态</label>
+                        <div class="layui-input-block">
+                            <input type="radio" name="enable" value="1" title="启用" checked>
+                            <input type="radio" name="enable" value="2" title="禁用">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <label class="layui-form-label">部门</label>
+                        <div class="layui-input-block">            
+                            <input type="text" id="company-user-add-form-department" lay-filter="company-user-add-form-department" name="deptid" value="" placeholder="不选择则属于公司" autocomplete="off" class="layui-input">           
+                        </div>
+                    </div>
+                    <div class="layui-inline">
+                        <label class="layui-form-label">部门leader</label>
+                        <div class="layui-input-block layui-form" lay-filter="company-user-add-form-radio-leader">
+                            <input type="radio" name="leader" lay-filter="company-user-add-form-leader" value="0" title="否" checked>
+                            <input type="radio" name="leader" lay-filter="company-user-add-form-leader" value="1" title="是">
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-form-item layui-form-text layui-col-md8 layui-col-lg7">
+                    <label class="layui-form-label">备注</label>
+                    <div class="layui-input-block">
+                        <textarea name="remark" placeholder="请输入备注信息" class="layui-textarea"></textarea>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="button" lay-submit lay-filter="company-user-add-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['admin', 'form', 'laydate', 'strpy', 'layer', 'treeSelect'], function(){
+        var $ = layui.$,
+            admin = layui.admin,
+            form = layui.form,
+            laydate = layui.laydate,
+            layer = layui.layer,
+            strpy = layui.strpy,
+            treeSelect = layui.treeSelect;
+
+        // 时间日期选择器
+        laydate.render({
+            elem: '#company-user-add-joindate',  //指定元素
+            value: new Date(),
+            isInitValue: true   //是否允许填充初始值，默认为 true
+        });
+
+        laydate.render({
+            elem: '#company-user-add-leavedate'  //指定元素
+        });
+
+        $('#company-user-add-form-leavedate').hide();
+
+        //树形下拉选择器 [https://fly.layui.com/extend/treeSelect/#doc]
+        treeSelect.render({
+            // 选择器
+            elem: '#company-user-add-form-department',
+            // data分为两种：1.数组数据 或者 2.URL地址
+            //数组数据示例 [{"id": 1, "name": "财务部","open": true, "children": []}]
+            data: layui.cache.baseapi + '/api/company.user/getdepartmenttree', //接口
+            // 异步加载方式：get/post，默认get
+            type: 'get',
+            // 占位符
+            placeholder: '不选择则属于公司',
+            // 是否开启搜索功能：true/false，默认false
+            search: true,
+            // 点击回调
+            click: function(d){
+                $("#company-user-add-form-department").val(d.current.id);
+            },
+            // 加载完成后的回调函数
+            success: function (d) {
+                var treeObj = treeSelect.zTree('company-user-add-form-department');
+                var nodes = treeObj.getNodes();
+                //默认选中主节点
+                treeSelect.checkNode('company-user-add-form-department', 1);
+                $("#company-user-add-form-department").val(1);
+                if (nodes.length == 0) {
+                    $(treeObj.setting.treeObj.selector).parent().css('display', 'none');
+                }
+            }
+        });
+
+        form.render(null, 'company-user-add-form');
+
+        form.verify({
+            realname: function(value, item){
+                if(!new RegExp("[\\u4E00-\\u9FFF]+","g").test(value)){
+                    return '姓名只能是汉字';
+                }
+            },username: function(value, item){ //value：表单的值、item：表单的DOM对象
+                if(!new RegExp("^[a-zA-Z0-9_\u4e00-\u9fa5\\s·]+$").test(value)){
+                    return '用户名不能有特殊字符';
+                }
+            }
+
+            //[正则匹配、匹配不符时的提示文字]
+            ,pass: [
+                /^[\S]{6,12}$/,'密码必须6到12位，且不能出现空格'
+            ]
+        });
+
+        //监听incorp radio
+        form.on('radio(company-user-add-radio-incorp)', function (data) {
+            if (data.value == 1) {
+                $('#company-user-add-form-leavedate').hide();
+                $('#company-user-add-leavedate').val('');
+            }else if (data.value == 4) {
+                $('#company-user-add-form-leavedate').show();
+                $('#company-user-add-leavedate').val(new Date());
+            }
+        });
+
+        //监听leader radio
+        form.on('radio(company-user-add-form-leader)', function (data) {
+            if (data.value == 1) {
+                if ($("#company-user-add-form-department").val() == 1) {
+                    layer.msg('请先选择员工所属的具体部门', {icon: 2});
+                    $("input[name='leader'][value=0]").prop("checked", "checked");
+                    form.render('radio', 'company-user-add-form');
+                }
+            }
+        });
+
+        //监听提交
+        form.on('submit(company-user-add-form-submit)', function (data) {                 
+            //部门id
+            data.field.deptid = $("#company-user-add-form-department").val();
+            //是否责任部门
+            data.field.leader = $("input[name='leader']:checked").val();
+            admin.req({
+                url: layui.cache.baseapi + '/api/company.user/add',
+                type: 'POST',
+                data: data.field,
+                done: function(res) {
+                    form.val("company-user-add-form", {//重置表单
+                        "name": "",
+                        "username": "",
+                        "password": "",
+                        "idcard": "",
+                        "mobile": "",
+                        "wechat": "",
+                        "qq": "",
+                        "position": "",
+                        "email": "",
+                        "family": "",
+                        "family_mobile": "",
+                        "join_date": new Date(),
+                        "leave_date": "",
+                        "remark": ""
+                    });
+                    laydate.render({
+                        elem: '#company-user-add-joindate',  //指定元素
+                        value: new Date(),
+                        isInitValue: true   //是否允许填充初始值，默认为 true
+                    });
+                    //默认选中主节点
+                    treeSelect.checkNode('company-user-add-form-department', 1);
+                    $("#company-user-add-form-department").val(1);
+                    $("input[name='leader'][value=0]").prop("checked", "checked");
+                    $("input[name='gender'][value=1]").prop("checked", "checked");
+                    $("input[name='enable'][value=1]").prop("checked", "checked");
+                    $("input[name='incorp'][value=1]").prop("checked", "checked");
+                    form.render(null, 'company-user-add-form');
+                    layer.msg(res.msg, {icon: 1 });
+                }
+            });   
+        });
+
+        $("#company-user-add-form-name").on("input",function(e){
+            //获取input输入的值
+            var autousername = strpy(e.delegateTarget.value, '').replace(/[ ]/g,"");
+            $("#company-user-add-form-username").val(autousername);
+        });
+    });
+</script>

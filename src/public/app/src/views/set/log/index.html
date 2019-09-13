@@ -1,0 +1,113 @@
+<title>日志</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>设置</cite></a>
+        <a><cite>日志</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">日志列表</div>
+        <div class="layui-form layui-form-pane layui-card-header layuiadmin-card-header-auto" lay-filter="set-log-index-search-form">
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">操作类型</label>
+                    <div class="layui-form layui-input-block" lay-filter="set-log-index-search-form-type">
+                        <select name="type">
+                            <option value="">请选择操作类型</option>
+                            <option value="insert">添加</option>
+                            <option value="update">修改</option>
+                            <option value="delete">删除</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">操作人</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="name" placeholder="请输入操作人姓名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">操作对象</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="table" placeholder="请输入操作对象" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">对象编号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="pkids" placeholder="请输入操作对象编号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">操作描述</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="remark" placeholder="请输入操作描述" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="set-log-index-search-form-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="layui-card-body">
+            <table class="layui-hide" id="LAY-set-log-index" lay-filter="LAY-set-log-index"></table>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+layui.use(['admin', 'form','table'], function() {
+    var $ = layui.jquery,
+    admin = layui.admin,
+    form = layui.form,
+    table = layui.table;
+
+    form.render('select','set-log-index-search-form-type');
+
+    //监听搜索
+    form.on('submit(set-log-index-search-form-search)', function (data) {
+        var field = data.field;
+        //执行重载
+        table.reload('LAY-set-log-index', {
+            page: {
+                curr: 1 //重新从第 1 页开始
+            },
+            where: field
+        });
+    });
+
+    //分类管理
+    table.render({
+        elem: '#LAY-set-log-index',
+        defaultToolbar: ['filter', 'print', 'exports'],
+        page: true,
+        limit: 20,
+        url: layui.cache.baseapi + '/api/set.log/index', //接口
+        cols: [[
+            { type: 'numbers', width: 80, title: 'ID'},
+            { field: 'name', title: '操作人', width: 100},
+            { field: 'type', title: '操作', width: 80, templet: function(row) {
+                switch (row.type) {
+                    case 'insert':
+                        return '添加';
+                    case 'update':
+                        return '修改';
+                    case 'delete':
+                        return '删除';
+                }
+            }},
+            { field: 'table', title: '操作对象', width: 100},
+            { field: 'pkids', title: '对象编号', width: 100},
+            { field: 'remark', title: '操作描述', minWidth: 200},
+            { field: 'createtime', title: '操作时间', width: 180 },
+            { field: 'sql', title: 'SQL'}
+        ]],
+        text: {
+            none: '暂无相关数据'
+        }
+    });
+});
+</script>

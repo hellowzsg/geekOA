@@ -1,0 +1,109 @@
+<title>课表录入</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>个人中心</cite></a>
+        <a href="#/lesson/index/"><cite>课表录入</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">课表录入</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="info-lesson-index-form">
+                <div class="layui-form-item">
+                    <label class="layui-form-label">是否有课</label>
+                    <div class="layui-input-inline">
+                        <input type="radio" name="isclass" value="1" title="有课" lay-filter="isclass" checked>
+                        <input type="radio" name="isclass" value="2" title="没课" lay-filter="isclass">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">周次</label>
+                    <div class="layui-input-block" style="width: 240px;">
+                        <select name="week">
+                            <option value="1">周一</option>
+                            <option value="2">周二</option>
+                            <option value="3">周三</option>
+                            <option value="4">周四</option>
+                            <option value="5">周五</option>
+                            <option value="6">周六</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">节次</label>
+                    <div class="layui-input-block" style="width: 240px;">
+                        <select name="node"  id="node">
+                            <option value="1">第一节</option>
+                            <option value="2">第二节</option>
+                            <option value="3">第三节</option>
+                            <option value="4">第四节</option>
+                            <option value="5">第五节</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">开始周次</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="number" name="begin" value=""/>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">结束周次</label>
+                    <div class="layui-input-inline">
+                        <input class="layui-input" type="number" name="end" value=""/>
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label">单双周</label>
+                    <div class="layui-input-inline" style="width: 250px;">
+                        <input type="radio" name="isdouble" value="1" title="单周" checked>
+                        <input type="radio" name="isdouble" value="2" title="双周">
+                        <input type="radio" name="isdouble" value="3" title="都有">
+                    </div>
+                </div>
+
+                <div class="layui-form-item">
+                    <label class="layui-form-label"></label>
+                    <div class="layui-input-inline">
+                        <input type="button" lay-submit lay-filter="info-lesson-index-form-submit" value="确认" class="layui-btn">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['admin', 'form', 'layer'], function(){
+        var $ = layui.$,
+            admin = layui.admin,
+            form = layui.form,
+            layer = layui.layer;
+
+        form.render(null, 'info-lesson-index-form');
+        form.on("radio(isclass)",function (data) {
+           if(data.value == '2'){
+               console.log(data);
+               $("#node").attr("disabled", "disabled");
+           }
+        });
+
+        //监听提交
+        form.on('submit(info-lesson-index-form-submit)', function (data) {
+            console.log(data);
+            admin.req({
+                url: layui.cache.baseapi + '/api/info.lesson/add',
+                type: 'POST',
+                data: data.field,
+                done: function(res) {
+                    layer.msg(res.msg, {icon: 1 });
+                }
+            });
+        });
+    });
+</script>

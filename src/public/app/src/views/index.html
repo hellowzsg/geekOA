@@ -1,0 +1,118 @@
+<div class="layui-fluid">
+<script type="text/html" template lay-type="post" lay-url="{{layui.cache.baseapi}}/api/common/console" lay-done="layui.data.consoleDone(d)">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md8">
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">快捷方式</div>
+                        <div class="layui-card-body">
+                            <div class="layui-carousel layadmin-carousel layadmin-shortcut">
+                                <div carousel-item>
+                                    <ul class="layui-row layui-col-space10">
+                                        <li class="layui-col-xs3">
+                                            <a lay-href="set/user/info">
+                                                <i class="layui-icon layui-icon-username"></i>
+                                                <cite>个人信息</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs3">
+                                            <a lay-href="check/rank/index">
+                                                <i class="layui-icon layui-icon-chart-screen"></i>
+                                                <cite>考勤排行</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs3">
+                                            <a lay-href="log/addlog/index">
+                                                <i class="layui-icon layui-icon-edit"></i>
+                                                <cite>添加日志</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs3">
+                                            <a lay-href="set/user/password">
+                                                <i class="layui-icon layui-icon-password"></i>
+                                                <cite>修改密码</cite>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="layui-col-md6">
+                    <div class="layui-card">
+                        <div class="layui-card-header">我的信息</div>
+                        <div class="layui-card-body layui-text">
+                            <table class="layui-table">
+                                <colgroup>
+                                    <col width="90">
+                                    <col>
+                                </colgroup>
+                                <tbody>
+                                    <tr>
+                                        <td>当前用户</td>
+                                        <td>{{ d.data.user.name || ''}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>所在部门</td>
+                                        <td>{{ d.data.user.departments || '' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>用户角色</td>
+                                        <td>{{ d.data.user.roles || '' }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>登陆信息</td>
+                                        <td>{{ d.data.user.logintime || '' }}<br/>{{ d.data.user.loginip || '' }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <!--
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">工作动态</div>
+                        <div class="layui-card-body">
+                            <dl class="layuiadmin-card-status">
+                                <dd>
+                                    <div>
+                                        <p>胡歌 在 <a href="http://fly.layui.com/vipclub/list/layuiadmin/">layuiadmin专区</a> 回答问题</p>
+                                        <span>几秒前</span>
+                                    </div>
+                                </dd>
+                            </dl>
+                        </div>
+                    </div> 
+                </div>
+                -->
+            </div>
+        </div>
+    </div>
+</script>
+</div>
+<script type="text/javascript">
+    layui.data.consoleDone = function(d) {
+        layui.use(['admin', 'carousel'], function() {
+            var $ = layui.$,
+            admin = layui.admin,
+            device = layui.device,
+            carousel = layui.carousel;
+            //轮播切换
+            $('.layadmin-carousel').each(function(){
+                var othis = $(this);
+                carousel.render({
+                    elem: this,
+                    width: '100%',
+                    arrow: 'none',
+                    interval: othis.data('interval'),
+                    autoplay: othis.data('autoplay') === true,
+                    trigger: (device.ios || device.android) ? 'click' : 'hover',
+                    anim: othis.data('anim')
+                });
+            });
+        });
+    }
+</script>

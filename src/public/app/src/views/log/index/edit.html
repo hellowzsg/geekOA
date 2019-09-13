@@ -1,0 +1,57 @@
+<title>编辑日志</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>日志管理</cite></a>
+        <a href="#/index/edit/"><cite>编辑日志</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">编辑日志</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="log-index-editLog-form">
+                <script type="text/html" template lay-url="{{layui.cache.baseapi}}/api/log.Index/edit" lay-data="{{JSON.stringify(layui.router().search)}}" lay-type="post">
+                    <div class="layui-form-item layui-form-text">
+                        <textarea name="content" required lay-verify="required" placeholder="请输入日志内容" class="layui-textarea" rows="13">
+                            {{d.data.content}}
+                        </textarea>
+                    </div>
+                    <div class="layui-form-item">
+                        <div class="layui-input-inline">
+                            <input type="hidden" name="lid" value="{{d.data.lid}}" >
+                            <input type="button" lay-submit lay-filter="log-index-editLog-form-submit" value="确认" class="layui-btn">
+                        </div>
+                    </div>
+                </script>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    layui.use(['admin', 'form', 'layer'], function(){
+        var admin = layui.admin,
+            form = layui.form,
+            layer = layui.layer;
+
+        form.render(null, 'log-index-editLog-form');
+
+        //监听提交
+        form.on('submit(log-index-editLog-form-submit)', function (data) {
+            console.log(data);
+            admin.req({
+                url: layui.cache.baseapi + '/api/log.Index/editLog',
+                type: 'POST',
+                data: data.field,
+                done: function(res) {
+                    layer.msg(res.msg, {
+                        icon: 1
+                    },
+                        function(){
+                            admin.closeThisTabs();//开启多标签页时关闭当前tab页面
+                            location.hash = '/log/index/'; //跳转到日志列表页
+                        });
+                },
+            });
+        });
+    });
+</script>

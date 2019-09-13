@@ -1,0 +1,232 @@
+<title>员工管理</title>
+  
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>公司管理</cite></a>
+        <a><cite>员工管理</cite></a>
+    </div>
+</div>
+
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-form layui-form-pane layui-card-header layuiadmin-card-header-auto" lay-filter="company-user-index-form">
+            <div class="layui-form-item" id="company-user-index-form-fold" style="display:none;">
+                <div class="layui-inline">
+                    <label class="layui-form-label">员工ID</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="uid" placeholder="请输入员工ID" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">手机号</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="mobile" placeholder="请输入手机号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">性别</label>
+                    <div class="layui-form layui-input-block">
+                        <select name="gender">
+                            <option value="">性别</option>
+                            <option value="1">男</option>
+                            <option value="2">女</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">登陆时间范围</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="logintimerange" id="company-user-index-range-date" placeholder="登陆时间范围" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">职位</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="position" placeholder="请输入职位" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">在职状态</label>
+                    <div class="layui-form layui-input-block">
+                        <select name="incorp">
+                            <option value="">在职状态</option>
+                            <option value="1">在职</option>
+                            <option value="2">离职</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">姓名</label>
+                    <div class="layui-input-block">
+                        <input id="company-user-index-form-name" type="text" data-values="0" data-name="" name="name" placeholder="请输入姓名" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">登陆账号</label>
+                    <div class="layui-input-block">
+                        <input id="company-user-index-form-username" type="text" data-values="0" data-name="" name="username" placeholder="请输入登陆账号" autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label">状态</label>
+                    <div class="layui-form layui-input-block">
+                        <select name="enable">
+                            <option value="">状态</option>
+                            <option value="1">启用</option>
+                            <option value="2">禁用</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <button class="layui-btn layuiadmin-btn-useradmin" lay-submit lay-filter="company-user-index-search">
+                        <i class="layui-icon layui-icon-search layuiadmin-button-btn"></i>
+                    </button>
+                    <a href="javascript:void(0);" id="company-user-index-form-searchfold" data-type="fold" title="高级搜索" style="margin-left:3px">▼展开</a>
+                </div>
+            </div>
+        </div>
+    
+        <div class="layui-card-body">
+            <script type="text/html" id="company-user-index-toolbar">
+            {{#  if(layui.admin.checkauth('company.user.add')){ }}
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-sm" lay-event="add" data-href="#/company/user/add">添加</button>
+                </div>
+            {{#  } }}
+            </script>
+            <table id="company-user-index-table" lay-filter="company-user-index-table"></table>
+            <script type="text/html" id="company-user-index-bar">
+            {{#  if(layui.admin.checkauth('company.user.edit')){ }}
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" href="#/company/user/edit/uid={{d.uid}}"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+            {{#  } }}
+            </script>
+        </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['form', 'table', 'laydate', 'autocomplete'], function(){
+        var $ = layui.jquery
+        ,form = layui.form
+        ,table = layui.table
+        ,laydate = layui.laydate
+        ,autocomplete = layui.autocomplete;
+
+        layui.link(layui.setter.base + 'style/extend/autocomplete.css?v=' + layui.admin.v);
+
+        //员工管理
+        table.render({
+            elem: '#company-user-index-table',
+            toolbar: '#company-user-index-toolbar',
+            page: true, 
+            limit: 10, 
+            url: layui.cache.baseapi + '/api/company.user/index', //接口
+            cols: [[
+                {field: 'uid', width: 100, title: 'ID', sort: true}, 
+                {field: 'username', title: '登陆账号', minWidth: 100},
+                {field: 'name', title: '姓名', minWidth: 100},
+                {field: 'idcard', title: '身份证号', minWidth: 180},
+                {field: 'gender', title: '性别', width: 60, templet:function(d){
+                    if (d.gender == 1) {
+                        return "男";
+                    }else if(d.gender == 2) {
+                        return "女";
+                    }else if(d.gender == 0) {
+                        return "";
+                    }
+                }}, 
+                {field: 'position', title: '职位', minWidth: 100},
+                {field: 'mobile', title: '手机号', width: 120},
+                {field: 'wechat', title: '微信号', width: 120, hide: true},
+                {field: 'qq', title: 'QQ号', width: 120, hide: true},
+                {field: 'email', title: '电子邮箱', width: 180, hide: true},
+                {field: 'family', title: '家属', minWidth: 80, hide: true},
+                {field: 'family_mobile', title: '家属手机号', width: 120, hide: true},
+                {field: 'join_date', title: '入职日期', width: 120, hide: true},
+                {field: 'remark', title: '备注', minWidth: 120}, 
+                {field: 'enable', title: '状态', width: 60, templet:function(d){
+                    return d.enable == 1 ? "启用" : "禁用";
+                }},
+                {field: 'incorp', title: '在职状态', width: 100, templet:function(d){
+                    return d.incorp == 1 ? "在职" : "离职";
+                }},
+                {field: 'leave_date', title: '离职日期', width: 120, hide: true, templet:function(d){
+                    return d.incorp == 1 ? "" : d.leave_date;
+                }},
+                {field: 'logintime', title: '登陆时间', width: 170, hide: true}, 
+                {field: 'loginip', title: '登陆IP', width: 100, hide: true},
+                {field: 'loginfailure', title: '登陆失败次数', width: 120, hide: true},
+                {field: 'createtime', title: '创建时间', width: 170, hide: true}, 
+                {field: 'updatetime', title: '更新时间', width: 170, hide: true},
+                {title: '操作', width: 150, align: 'center', toolbar: '#company-user-index-bar' }
+            ]], 
+            text: {
+                none: '暂无相关数据'
+            }
+        });
+
+        form.render(null, 'company-user-index-form');
+
+        //日期范围
+        laydate.render({
+            elem: '#company-user-index-range-date'
+            ,range: '~'
+        });
+
+        //员工选择
+        autocomplete.render({
+            elem: $('#company-user-index-form-name'),
+            url: layui.cache.baseapi + '/api/company.user/users',
+            template_val: '{{d.name}}',
+            template_txt: '{{d.name}} <span class=\'layui-badge layui-bg-gray\'>{{d.sex}}</span> <{{d.department}}>',
+            onselect: function (resp) {
+                $('#company-user-index-form-name').data('values', resp.id);                  
+                $('#company-user-index-form-name').data('name', resp.name);                  
+            }
+        });
+
+        //登陆账号选择
+        autocomplete.render({
+            elem: $('#company-user-index-form-username'),
+            url: layui.cache.baseapi + '/api/company.user/users',
+            template_val: '{{d.pinyin}}',
+            template_txt: '{{d.pinyin}} <span class=\'layui-badge layui-bg-gray\'>{{d.sex}}</span> <{{d.department}}>',
+            onselect: function (resp) {
+                $('#company-user-index-form-username').data('values', resp.id);                  
+                $('#company-user-index-form-username').data('name', resp.name);                  
+            }
+        });
+
+        //监听自定义头部工具条
+        table.on('toolbar(company-user-index-table)', function(obj) {
+            if(obj.event == 'add') {
+                location.href = $(this).data('href');
+            }
+        });
+  
+        //监听搜索
+        form.on('submit(company-user-index-search)', function(data){
+            var field = data.field;
+    
+            //执行重载
+            table.reload('company-user-index-table', {
+                page: {
+				    curr: 1 //重新从第 1 页开始
+			    },
+                where: field
+            });
+        });
+
+        $('#company-user-index-form-searchfold').on('click', function () {
+            if ($(this).text().indexOf('展开') !== -1) {
+                $(this).text('▲隐藏');
+                $('#company-user-index-form-fold').show();
+            } else {
+                $(this).text('▼展开');
+                $('#company-user-index-form-fold').hide();
+            }
+        });
+    });
+</script>

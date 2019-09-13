@@ -1,0 +1,122 @@
+<style>
+    tr:hover textarea{
+        background-color: #f2f2f2 !important;
+    }
+</style>
+<title>日志列表</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>日志管理</cite></a>
+        <a href="#/index/index/"><cite>日志列表</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">日志列表</div>
+        <div class="layui-card-body">
+            <div class="layui-form"  lay-filter="log-index-index-form">
+                <div class="layui-form-item">
+                    <div class="layui-inline">
+                        <input type="text" name="sdate" class="layui-input" id="lsdate" placeholder="开始时间" style="display: inline;width: 26%;">
+                        <span>-</span>
+                        <input type="text" name="edate" class="layui-input" id="ledate" placeholder="结束时间" style="display: inline;width: 26%;">
+                        <input type="text" name="name" class="layui-input" placeholder="姓名" style="display: inline;width: 25%;">
+                        <button class="layui-btn" lay-submit lay-filter="log-index-index-form-submit" style="margin-left: 10px;">立即搜索</button>
+                        <div style="width: 300px;height: 35px;margin-top:20px;">
+                             <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-lastWeek-form-submit">上周</button>
+                             <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-thisWeek-form-submit">本周</button>
+                             <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-lastMonth-form-submit">上月</button>
+                             <button class="layui-btn layui-btn-normal layui-btn-sm" lay-submit lay-filter="log-index-index-thisMonth-form-submit">本月</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <table id="log-index-index-table" lay-filter="log-index-index-table" class="tables"></table>
+         </div>
+    </div>
+</div>
+
+<script>
+    layui.use(['laydate', 'form', 'table', 'admin','jquery'], function(){
+        var laydate = layui.laydate
+            ,table = layui.table
+            ,form = layui.form
+            ,admin = layui.admin
+            ,$=layui.jquery;
+        //执行laydate实例
+        laydate.render({
+            elem: '#lsdate'
+        });
+        laydate.render({
+            elem: '#ledate'
+        });
+
+        form.render(null, 'log-index-index-form');
+        table.render({
+            elem: '#log-index-index-table'
+            ,url: layui.cache.baseapi + '/api/log.Index/index'
+            ,page: true //开启分页
+            ,cols: [[ //表头
+                {field: 'name', title: '姓名', align: 'center'}
+                ,{field:'content', title: '内容',width: 400, templet:'#content'}
+                ,{field: 'ldate', title: '创建时间', align: 'center'}
+                ,{title: '操作', align:'center',width: 100,
+                    templet: function(d){
+                        var html='';
+                        if (d.userId == d.uid) {
+                            var Btn = '<a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit" href="#/log/index/edit/lid=' + d.lid + '">编辑</a>';
+                        } else {
+                            var Btn = '<a class="layui-btn layui-btn-disabled layui-btn-xs" lay-event="edit">编辑</a>';
+                        }
+                        return Btn;
+                    }
+                }
+            ]],
+            done:function () {
+                $(".text").parent().css("min-height","100px")
+            }
+        });
+
+        //监听搜索
+        form.on('submit', function(data){
+            var field = data.field, date = '' ;
+            if (data.elem.innerText == '上周') {
+                field.sdate = '';
+                field.edate = '';
+                date = 'lastWeek';
+            } else if (data.elem.innerText == '本周') {
+                field.sdate = '';
+                field.edate = '';
+                date = 'thisWeek';
+            } else if (data.elem.innerText == '上月') {
+                field.sdate = '';
+                field.edate = '';
+                date = 'lastMonth';
+            } else if (data.elem.innerText == '本月') {
+                field.sdate = '';
+                field.edate = '';
+                date = 'thisMonth';
+            }
+            field.date = date;
+            //执行重载
+            table.reload('log-index-index-table', {
+                page: {
+                    curr: 1 //重新从第 1 页开始
+                },
+                where: field
+            });
+            laydate.render({
+                elem: '#lsdate'
+            });
+            laydate.render({
+                elem: '#ledate'
+            });
+        });
+    });
+</script>
+<!-- 内容 -->
+<script type="text/html" id="content">
+    <textarea name="content" disabled style="width: 100%;height: 100px;background-color: #fff;border: 0px;transition-delay: 0.07s;" class="text">
+        {{d.content}}
+    </textarea>
+</script>

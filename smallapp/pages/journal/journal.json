@@ -1,0 +1,7 @@
+{
+  "usingComponents": {
+    "date-component": "/Components/date/date-component"
+  },
+  "navigationBarTitleText": "日志",
+  "enablePullDownRefresh": true
+}

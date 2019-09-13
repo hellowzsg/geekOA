@@ -1,0 +1,28 @@
+<view class="container">
+  <view class='detail'>
+    <view class="de-title">详细记录</view>
+    <i-steps current="{{current}}" direction="vertical">
+      <block wx:for="{{details}}" wx:key>
+        <i-step icon="time">
+          <view slot="title">
+            时间：{{item.date}}
+          </view>
+          <view slot="title" wx:if="{{item.checkType == '上班'}}">
+            状况：
+            <text class="top">{{item.checkType}}</text>
+          </view>
+          <view slot="title" wx:if="{{item.checkType == '下班'}}">
+            状况：
+            <text class="bottom">{{item.checkType}}</text>
+          </view>
+          <view slot="content">
+            状态：{{item.locationResult}}
+          </view>
+          <view slot="content">
+            方式：{{item.sourceType}}
+          </view>
+        </i-step>
+      </block>
+    </i-steps>
+  </view>
+</view>

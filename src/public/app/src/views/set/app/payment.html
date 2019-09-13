@@ -1,0 +1,141 @@
+<title>付款方式</title>
+<div class="layui-card layadmin-header">
+    <div class="layui-breadcrumb" lay-filter="breadcrumb">
+        <a><cite>设置</cite></a>
+        <a><cite>应用配置</cite></a>
+        <a><cite>付款方式</cite></a>
+    </div>
+</div>
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-header">付款方式列表</div>
+        <div class="layui-card-body">
+            <table class="layui-hide" id="LAY-set-app-payment" lay-filter="LAY-set-app-payment"></table>
+            <script type="text/html" id="Lay-set-app-payment-bar">
+            {{#  if(layui.admin.checkauth('set.payment.edittags')){ }}
+                <a class="layui-btn layui-btn-normal layui-btn-xs" lay-event="edit"><i class="layui-icon layui-icon-edit"></i>编辑</a>
+            {{#  } }}
+            {{#  if(layui.admin.checkauth('set.payment.deltags')){ }}
+                <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del"><i class="layui-icon layui-icon-delete"></i>删除</a>
+            {{#  } }}
+            </script>
+            <script type="text/html" id="LAY-set-app-payment-toolbar">
+            {{#  if(layui.admin.checkauth('set.payment.addtags')){ }}
+                <div class="layui-btn-container">
+                    <button class="layui-btn layui-btn-sm" lay-event="add">添加</button>
+                </div>
+            {{# } }}
+            </script>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+layui.use(['admin', 'table', 'form', 'view'], function() {
+    var $ = layui.jquery,
+    admin = layui.admin,
+    form = layui.form,
+    view = layui.view,
+    table = layui.table;
+
+    var set_app_payment_form_index = null;
+
+    layui.data.setAppPaymentFormRender = function(params) {
+        form.render(null, 'LAY-set-app-payment-from');
+        //监听提交
+        form.on('submit(LAY-set-app-payment-from-submit)', function (data) {
+            var field = data.field; //获取提交的字段
+            if(field.type == 'add') {
+                admin.req({
+                    url: layui.cache.baseapi + '/api/set.payment/addtags',
+                    type: 'POST',
+                    data: data.field,
+                    done: function(res) {
+                        layer.msg(res.msg, {icon: 1 });
+                        table.reload('LAY-set-app-payment'); //重载表格
+                        layer.close(set_app_payment_form_index); //执行关闭 
+                    }
+                });
+            } else {
+                admin.req({
+                    url: layui.cache.baseapi + '/api/set.payment/edittags',
+                    type: 'POST',
+                    data: data.field,
+                    done: function(res) {
+                        layer.msg(res.msg, {
+                                icon: 1,
+                                time: 2000 //2秒关闭（如果不配置，默认是3秒）
+                            },
+                            function() {
+                                table.reload('LAY-set-app-payment'); //重载表格
+                                layer.close(set_app_payment_form_index); //执行关闭
+                        });
+                    }
+                });
+            }            
+        });
+    };
+
+    //分类管理
+    table.render({
+        elem: '#LAY-set-app-payment',
+        defaultToolbar: ['filter', 'print', 'exports'], 
+        toolbar: '#LAY-set-app-payment-toolbar',
+        url: layui.cache.baseapi + '/api/set.payment/tags', //接口
+        cols: [[
+            { type: 'numbers', width: 100, title: 'ID'},
+            { field: 'name', title: '名称', minWidth: 200},
+            { field: 'listorder', title: '排序权重', minWidth: 100 },
+            { title: '操作', width: 150, align: 'center', toolbar: '#Lay-set-app-payment-bar' }
+        ]],
+        text: {
+            none: '暂无相关数据'
+        }
+    });
+    
+    //监听自定义头部工具条
+    table.on('toolbar(LAY-set-app-payment)', function(obj) {
+        if(obj.event == 'add') {
+            set_app_payment_form_index = admin.popup({
+                title: '添加'
+                , area: ['450px', '360px']
+                , id: 'LAY-popup-content-tags'
+                , success: function (layero, index) {
+                    view(this.id).render('set/app/paymentform', {name: '', type: 'add', listorder: 99}).done(function (data) {
+                        layui.data.setAppPaymentFormRender(data);
+                    });
+                }
+            });
+        }
+    });
+    //监听工具条
+    table.on('tool(LAY-set-app-payment)', function (obj) {
+        var data = obj.data;
+        if (obj.event === 'del') {
+            layer.confirm('确定删除此标签？', function (index) {
+                admin.req({
+                    url: layui.cache.baseapi + '/api/set.payment/deltags',
+                    type: 'POST',
+                    data: {tagid: data.tagid},
+                    done: function() {
+                        obj.del();
+                        layer.close(index);
+                    }
+                });
+            });
+        } else if (obj.event === 'edit') {
+            data.type = 'edit';
+            set_app_payment_form_index = admin.popup({
+                title: '编辑标签'
+                , area: ['450px', '360px']
+                , id: 'LAY-popup-content-tags'
+                , success: function (layero, index) {
+                    view(this.id).render('set/app/paymentform', data).done(function (data) {
+                        layui.data.setAppPaymentFormRender(data);
+                    });
+                }
+            });
+        }
+    });
+});
+</script>

@@ -1,0 +1,19 @@
+<view class="myinfo-box">
+  <image src='/images/myinfo_bg.gif' class='myinfo-bg'></image>
+  <view class="myinfo-image">
+    <open-data type="userAvatarUrl"></open-data>
+  </view>
+  <view class="myinfo-name">
+    <open-data type="userNickName"></open-data>
+  </view>
+  <view class='myinfo-details'>
+    <view class='myinfo-details-item' bindtap='myCheck'>
+      <image class='myinfo-details-icon' src='/images/myinfo_check.png'></image>
+      <text class='myinfo-details-check'>我的考勤</text>
+    </view>
+    <view class='myinfo-details-item' bindtap='myJournal'>
+      <image class='myinfo-details-icon' src='/images/myinfo_journal.png'></image>
+      <text class='myinfo-details-journal'>添加日志</text>
+    </view>
+  </view>
+</view>
