@@ -52,7 +52,7 @@
          network: ''
        }
      },
-     urlId: 'https://geek.heeyboy.cn',
+     urlId: '服务器url eg:https://geek.test.cn',
      uId: ''
    }
  })
