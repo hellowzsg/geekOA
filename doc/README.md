@@ -96,7 +96,7 @@ DATABASE_PREFIX = eduoa_
 
 ##### 5. 配置钉钉开发者AppKey，AppSecret
 `vim src\extend\Dingding\Attendance.php`  
-`protected $config = [
+```protected $config = [
         'AppKey'    => '',
         'AppSecret' =>  '',
         //不读取一下用户的考勤记录
@@ -104,7 +104,7 @@ DATABASE_PREFIX = eduoa_
                         '123456789101112',  //钉钉userId
                         '123456789101112',
                         ],
-    ];`
+    ];```
 
 
 ### 其它命令
