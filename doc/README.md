@@ -107,7 +107,16 @@ protected $config = [
                         ],
     ];
 ```
-##### 6. 更新geek_userinfo表的用户的钉钉userid
+##### 6. 配置微信小程序appid,appSecret
+`vim src\extend\Dingding\Message.php`   
+```
+protected $config = array(
+        'appid' => '微信小程序id',
+        'appSecret' => '小程序appSecret',
+        'template_id' => 'R6ajqLT2m0AkyxnfZujCwcQQUnY7TqyeTvQBhU5fYrk'
+    );
+```
+##### 7. 更新geek_userinfo表的用户的钉钉userid
 **根据姓名匹配钉钉用户，确保geekOA系统的用户姓名与钉钉姓名一致**  
 ```
 //更新所有用户
@@ -115,7 +124,7 @@ php think attend -d all
 //更新uid为10000001(该uid为geekOA系统的用id不是钉钉userId)的用户
 php think attend -d 10000001
 ```
-##### 7. 配置定时任务
+##### 8. 配置定时任务
 ```
 //进入终端输入命令
 crontab -e
@@ -123,7 +132,7 @@ crontab -e
 // **对应上项目地址**，当前定时时间为每晚10:30读取记录并推送消息
 30 22 * * * php /www/wwwroot/geekOA/src/think attend -a today
 ```
-##### 8. 愉快使用
+##### 9. 愉快使用
 管理员可录入课表，配置节假日
 
 
