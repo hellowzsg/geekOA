@@ -12,8 +12,8 @@ use think\Exception;
 class Attendance
 {
     protected $config = [
-        'AppKey'    => 'dings1km42nhvhlfw9zs',
-        'AppSecret' =>  'HEjJPOR3_0YmBrWPl6kKqTzC7Jt7MG824bxEMW6USvIXH1Oqcs2jchgigJTJxpON',
+        'AppKey'    => '钉钉appkey',
+        'AppSecret' =>  '钉钉AppSecret',
         'undoUser'  =>  [
                         '3544261531154857',
                         '1427035204943429',
