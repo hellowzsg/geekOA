@@ -8,3 +8,6 @@
 1. doc  文档目录  
 2. src  项目主目录  
 3. smallapp 小程序目录
+## 联系我们
+githup https://github.com/hellowzsg/geekOA.git  
+email helloworldzsg@gmail.com
