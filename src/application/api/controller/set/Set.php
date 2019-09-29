@@ -119,7 +119,7 @@ class Set extends Api{
         }
         unset($data['access_token']);
         $res = Db::table('oa_geek_conf')->where(['id' => 1])->update($data);
-        if($res){
+        if($res !== false){
             $this->success('编辑成功');
         }else{
             $this->error('编辑失败','',2002);
